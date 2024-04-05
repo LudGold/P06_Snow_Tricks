@@ -59,6 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid')]
     private ?Uuid $userUuid = null;
 
+    #[ORM\OneToOne(mappedBy: 'avatars', cascade: ['persist', 'remove'])]
+    private ?Avatar $avatar = null;
+
     public function __construct()
     {
         $this->figures = new ArrayCollection();
@@ -257,6 +260,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserUuid(Uuid $userUuid): static
     {
         $this->userUuid = $userUuid;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?Avatar
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Avatar $avatar): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($avatar === null && $this->avatar !== null) {
+            $this->avatar->setAvatars(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($avatar !== null && $avatar->getAvatars() !== $this) {
+            $avatar->setAvatars($this);
+        }
+
+        $this->avatar = $avatar;
 
         return $this;
     }
