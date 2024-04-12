@@ -54,8 +54,7 @@ class Figure
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-        $slugger = new AsciiSlugger();
-        $this->slug = strtolower($slugger->slug($this->getName()));
+        
     }
  
     public function getId(): ?int
