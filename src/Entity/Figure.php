@@ -48,14 +48,21 @@ class Figure
     #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figures')]
     private Collection $videos;
 
+    #[ORM\ManyToOne(inversedBy: 'figures')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $categories = null;
+
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'figureId')]
+    private Collection $categories_id;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-        $slugger = new AsciiSlugger();
-        $this->slug = strtolower($slugger->slug($this->getName()));
+        $this->categories_id = new ArrayCollection();
+        
     }
  
     public function getId(): ?int
@@ -220,6 +227,48 @@ class Figure
             // set the owning side to null (unless already changed)
             if ($video->getFigures() === $this) {
                 $video->setFigures(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategories(): ?Category
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(?Category $categories): static
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategoriesId(): Collection
+    {
+        return $this->categories_id;
+    }
+
+    public function addCategoriesId(Category $categoriesId): static
+    {
+        if (!$this->categories_id->contains($categoriesId)) {
+            $this->categories_id->add($categoriesId);
+            $categoriesId->setFigureId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategoriesId(Category $categoriesId): static
+    {
+        if ($this->categories_id->removeElement($categoriesId)) {
+            // set the owning side to null (unless already changed)
+            if ($categoriesId->getFigureId() === $this) {
+                $categoriesId->setFigureId(null);
             }
         }
 

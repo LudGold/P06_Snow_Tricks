@@ -62,11 +62,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'avatars', cascade: ['persist', 'remove'])]
     private ?Avatar $avatar = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $emailConfirmationToken = null;
+
     public function __construct()
     {
         $this->figures = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->userUuid = Uuid::v4();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -284,5 +288,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    public function getEmailConfirmationToken(): ?string
+    {
+        return $this->emailConfirmationToken;
+    }
+
+    public function setEmailConfirmationToken(?string $emailConfirmationToken): static
+    {
+        $this->emailConfirmationToken = $emailConfirmationToken;
+
+        return $this;
+    }
+    public function generateEmailConfirmationToken(): void
+    {
+        $this->emailConfirmationToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
 }
