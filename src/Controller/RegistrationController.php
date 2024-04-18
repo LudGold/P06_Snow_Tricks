@@ -7,6 +7,7 @@ use App\Service\EmailConfirmationSender;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,15 +38,18 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            // Générez le token de confirmation
-            $confirmationToken = md5(uniqid());
-            $user->setEmailConfirmationToken($confirmationToken);
+            // Générer le token de confirmation d'email
+            $user->generateEmailConfirmationToken();
+
             $entityManager->persist($user);
             $entityManager->flush();
             // URL de confirmation
-            $confirmationUrl = $this->generateUrl('confirm_email', ['token' => $confirmationToken], true);
+            $confirmationUrl = $this->generateUrl('confirm_email', ['token' => $user->getEmailConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+
             // do anything else you need here, like send an email
             $emailConfirmationSender->sendConfirmationEmail($user, $confirmationUrl);
+
 
             return $this->redirectToRoute('app_main_homepage');
         }
@@ -55,26 +59,25 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route("/confirm-email/{token}", name: "confirm_email")]
-    
+    #[Route("confirm-email/{token}", name: 'confirm_email')]
+
     public function confirmEmail(Request $request, string $token, EntityManagerInterface $entityManager): Response
     {
         // Récupérez l'utilisateur associé au token de confirmation
         $user = $entityManager->getRepository(User::class)->findOneBy(['emailConfirmationToken' => $token]);
-
         // Vérifier si l'utilisateur existe avec ce token
         if (!$user) {
             throw $this->createNotFoundException('Email confirmation token is invalid.');
         }
 
         // Marquer l'utilisateur comme ayant confirmé son email
-        $user->setEmailConfirmed(true);
+        $user->setIsVerified(true);
         $user->setEmailConfirmationToken(null);
 
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
 
         // Rediriger vers une page après la confirmation de l'email
-        return $this->redirectToRoute('app_main_home');
+        return $this->redirectToRoute('app_main_homepage');
     }
 }
