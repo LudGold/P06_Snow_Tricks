@@ -22,10 +22,11 @@ class Comment
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(max: 2000, maxMessage: 'votre commentaire ne peut dépasser {{limit}} caractères')]
     private ?string $content = null;
-
+    
+    #[Assert\NotNull(message: "L'utilisateur doit être spécifié")]
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user_id = null;
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    private ?User $user = null;
 
     private ?string $fullName = null;
 
@@ -67,19 +68,19 @@ class Comment
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     public function setUserId(?User $user_id): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user_id;
 
         return $this;
     }
 
     public function getFullName(): ?string
     {
-        $this->fullName = $this->user_id->getFirstName() . " " . $this->user_id->getLastName();
+        $this->fullName = $this->user->getFirstName() . " " . $this->user->getLastName();
         return $this->fullName;
     }
 
