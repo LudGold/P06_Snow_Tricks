@@ -20,7 +20,7 @@ class EmailConfirmationSender
     {
             
         $email = (new TemplatedEmail())
-            ->from('nepasrepondre@test.fr')
+            ->from('noreply@example.com')
             ->to($user->getEmail())
             ->subject('Confirmation Email')
             ->htmlTemplate('registration/confirmation_email.html.twig')
@@ -30,5 +30,19 @@ class EmailConfirmationSender
     
         $this->mailer->send($email);
     }
-    
-}
+    public function sendResetPasswordEmail(User $user, string $resetPasswordUrl): void
+    {
+        $email = (new TemplatedEmail())
+            ->from('noreply@example.com')
+            ->to($user->getEmail())
+            ->subject('Mot de passe oublié')
+            ->htmlTemplate('security/reset_password.html.twig')
+            ->context([
+                'resetPasswordUrl' => $resetPasswordUrl,
+                'token'  => $user->getResetToken(),
+            ]);
+
+        $this->mailer->send($email);
+    }
+}     
+

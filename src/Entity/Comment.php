@@ -25,7 +25,7 @@ class Comment
     
     #[Assert\NotNull(message: "L'utilisateur doit être spécifié")]
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     private ?string $fullName = null;
@@ -66,14 +66,14 @@ class Comment
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user = $user_id;
+        $this->user = $user;
 
         return $this;
     }

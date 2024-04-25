@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\FigureRepository;
 use DateTimeImmutable;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -33,9 +32,6 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
-
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'figure')]
     private Collection $comments;
 
@@ -50,19 +46,16 @@ class Figure
 
     #[ORM\ManyToOne(inversedBy: 'figures')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $categories = null;
+    private ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'figureId')]
-    private Collection $categories_id;
-
+   
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-        $this->categories_id = new ArrayCollection();
-        
+               
     }
  
     public function getId(): ?int
@@ -118,12 +111,12 @@ class Figure
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(string $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
@@ -232,46 +225,5 @@ class Figure
 
         return $this;
     }
-
-    public function getCategories(): ?Category
-    {
-        return $this->categories;
-    }
-
-    public function setCategories(?Category $categories): static
-    {
-        $this->categories = $categories;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategoriesId(): Collection
-    {
-        return $this->categories_id;
-    }
-
-    public function addCategoriesId(Category $categoriesId): static
-    {
-        if (!$this->categories_id->contains($categoriesId)) {
-            $this->categories_id->add($categoriesId);
-            $categoriesId->setFigureId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategoriesId(Category $categoriesId): static
-    {
-        if ($this->categories_id->removeElement($categoriesId)) {
-            // set the owning side to null (unless already changed)
-            if ($categoriesId->getFigureId() === $this) {
-                $categoriesId->setFigureId(null);
-            }
-        }
-
-        return $this;
-    }
+           
 }

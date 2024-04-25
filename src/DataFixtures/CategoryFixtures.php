@@ -7,12 +7,13 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 
-class CatgeoryFixtures extends Fixture
+class CategoryFixtures extends Fixture
 {
+    public const CATEGORY_REFERENCE = 'category-ref';
     public function load(ObjectManager $manager): void
     {
 
-        $categoriesData = json_decode(file_get_contents(__DIR__ . '/CategoriesDatas.json'), true);
+        $categoriesData = json_decode(file_get_contents(__DIR__ . '/categoriesDatas.json'), true);
 
         foreach ($categoriesData as $categoryData) {
             $category = new Category();
@@ -21,5 +22,6 @@ class CatgeoryFixtures extends Fixture
         }
 
         $manager->flush();
+        $this->addReference(self::CATEGORY_REFERENCE, $category);
     }
 }

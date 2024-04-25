@@ -44,12 +44,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // URL de confirmation
-            $confirmationUrl = $this->generateUrl('confirm_email', ['token' => $user->getEmailConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-
+            $confirmationUrl = $this->generateUrl('confirm_email', ['emailConfirmationToken' => $user->getEmailConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
             // do anything else you need here, like send an email
             $emailConfirmationSender->sendConfirmationEmail($user, $confirmationUrl);
-
 
             return $this->redirectToRoute('app_main_homepage');
         }
@@ -59,12 +57,17 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route("confirm-email/{token}", name: 'confirm_email')]
+    #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
 
-    public function confirmEmail(Request $request, string $token, EntityManagerInterface $entityManager): Response
+    public function confirmEmail(
+        Request $request, 
+        string $emailConfirmationToken, 
+        EntityManagerInterface $entityManager): Response
     {
+        
         // Récupérez l'utilisateur associé au token de confirmation
-        $user = $entityManager->getRepository(User::class)->findOneBy(['emailConfirmationToken' => $token]);
+        $user = $entityManager->getRepository(User::class)->findOneBy(['emailConfirmationToken' => $emailConfirmationToken]);
+      
         // Vérifier si l'utilisateur existe avec ce token
         if (!$user) {
             throw $this->createNotFoundException('Email confirmation token is invalid.');
@@ -73,7 +76,7 @@ class RegistrationController extends AbstractController
         // Marquer l'utilisateur comme ayant confirmé son email
         $user->setIsVerified(true);
         $user->setEmailConfirmationToken(null);
-
+       
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
 

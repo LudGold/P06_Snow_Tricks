@@ -4,11 +4,11 @@
 {% endblock %}
 
 {% block body %}
-{% if error %}
-			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
+	{% if error %}
+		<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+	{% endif %}
 	<form method="post" action="/login">
-				{% if app.user %}
+		{% if app.user %}
 			<div class="mb-3">
 				You are logged in as
 				{{ app.user.userIdentifier }},
@@ -22,8 +22,7 @@
 		<label for="password">Password</label>
 		<input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
 
-		<input
-		type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 		<div class="checkbox mb-3">
 			<label>
@@ -35,4 +34,6 @@
 			Sign in
 		</button>
 	</form>
+	<a class="forgot-password" href="{{ path('app_forgot_password') }}">Mot de passe oublié?</a>
+
 {% endblock %}

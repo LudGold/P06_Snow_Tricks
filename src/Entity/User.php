@@ -44,12 +44,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Figure::class, mappedBy: 'author')]
     private Collection $figures;
 
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user_id')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user')]
     private Collection $comments;
 
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
-
+    
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
@@ -62,8 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'avatars', cascade: ['persist', 'remove'])]
     private ?Avatar $avatar = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 32, nullable: true)]
     private ?string $emailConfirmationToken = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetToken = null;
+
 
     public function __construct()
     {
@@ -202,7 +206,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setUserId($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -212,8 +216,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getUserId() === $this) {
-                $comment->setUserId(null);
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 
@@ -301,8 +305,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    public function generateEmailConfirmationToken(): void
+    public function generateEmailConfirmationToken(): string
     {
-        $this->emailConfirmationToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        $token = bin2hex(random_bytes(32));
+
+        // Tronquer le token si sa longueur dépasse 32 caractères
+        if (strlen($token) > 32) {
+            $token = substr($token, 0, 32);
+        }
+    
+        $this->emailConfirmationToken = $token;
+        return $this->emailConfirmationToken;
     }
+    
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+      
 }

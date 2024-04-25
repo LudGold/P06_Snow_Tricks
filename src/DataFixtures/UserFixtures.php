@@ -17,23 +17,24 @@ class UserFixtures extends Fixture
     ) {
     }
 
+    public const USER_REFERENCE = "user-ref";
+
     public function load(ObjectManager $manager): void
     {
-        $json = file_get_contents(__DIR__ . '/usersDatas.json');
+        $usersDatas = json_decode(file_get_contents(__DIR__ . '/usersDatas.json'), true);
+        $allUsers = []; 
+        
 
-        // Convertir le JSON en tableau associatif
-        $usersArray = json_decode($json, true);
-
-        // Itérer sur chaque utilisateur et créer une entité User correspondante
-        foreach ($usersArray as $key => $userAttr) {
+        foreach ($usersDatas as $userAtt) {
             $user = $this->createUser(
-                $userAttr['firstName'],
-                $userAttr['lastName'],
-                $userAttr['email'],
-                $userAttr['password'],
+                $userAtt['firstName'],
+                $userAtt['lastName'],
+                $userAtt['email'],
+                $userAtt['password'],
             );
             $manager->persist($user);
-            $this->addReference('user_0' . $key, $user);
+
+            $allUsers[] = $user;
         }
         $manager->flush();
     }
@@ -47,9 +48,11 @@ class UserFixtures extends Fixture
             ->setLastname($lastName)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUserUuid(Uuid::v4());
-            $avatar = new Avatar();
-             $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-             $user->setAvatar($avatar);
+        $avatar = new Avatar();
+        $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $user->setAvatar($avatar);
+
+        $this->addReference(self::USER_REFERENCE . '_' . $firstName . '-' . $lastName, $user);
 
         return $user;
     }
