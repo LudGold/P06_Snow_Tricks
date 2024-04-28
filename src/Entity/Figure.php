@@ -38,16 +38,15 @@ class Figure
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figures')]
-    private Collection $images;
-
-    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figures')]
-    private Collection $videos;
-
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure', cascade: ['persist'])]
+    private $images;
+    
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure', cascade: ['persist'])]
+    private $videos;
+    
     #[ORM\ManyToOne(inversedBy: 'figures')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
-
    
     public function __construct()
     {

@@ -22,8 +22,8 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $usersDatas = json_decode(file_get_contents(__DIR__ . '/usersDatas.json'), true);
-        $allUsers = []; 
-        
+        $allUsers = [];
+
 
         foreach ($usersDatas as $userAtt) {
             $user = $this->createUser(
@@ -38,18 +38,21 @@ class UserFixtures extends Fixture
         }
         $manager->flush();
     }
-    private function createUser(string $email, string $password, string $firstName, string $lastName): User
+    private function createUser(string $firstName, string $lastName,string $email, string $password): User
     {
         $user = new User();
-        $user->setEmail($email)
+        $user->setFirstname($firstName)
+            ->setLastname($lastName)
+            ->setEmail($email)
             ->setPassword($this->hasher->hashPassword($user, $password))
             ->setRoles(['ROLE_USER']) // rôle par défaut
-            ->setFirstname($firstName)
-            ->setLastname($lastName)
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUserUuid(Uuid::v4());
         $avatar = new Avatar();
+        $avatar->setName('avatar');
         $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $avatar->setAvatar('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
         $user->setAvatar($avatar);
 
         $this->addReference(self::USER_REFERENCE . '_' . $firstName . '-' . $lastName, $user);

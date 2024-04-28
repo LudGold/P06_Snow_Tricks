@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Service\EmailConfirmationSender;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,14 +59,14 @@ class RegistrationController extends AbstractController
     #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
 
     public function confirmEmail(
-        Request $request, 
-        string $emailConfirmationToken, 
-        EntityManagerInterface $entityManager): Response
-    {
-        
+        Request $request,
+        string $emailConfirmationToken,
+        EntityManagerInterface $entityManager
+    ): Response {
+
         // Récupérez l'utilisateur associé au token de confirmation
         $user = $entityManager->getRepository(User::class)->findOneBy(['emailConfirmationToken' => $emailConfirmationToken]);
-      
+
         // Vérifier si l'utilisateur existe avec ce token
         if (!$user) {
             throw $this->createNotFoundException('Email confirmation token is invalid.');
@@ -76,7 +75,7 @@ class RegistrationController extends AbstractController
         // Marquer l'utilisateur comme ayant confirmé son email
         $user->setIsVerified(true);
         $user->setEmailConfirmationToken(null);
-       
+
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
 

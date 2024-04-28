@@ -4,36 +4,41 @@ namespace App\DataFixtures;
 
 use App\Entity\Figure;
 use App\Entity\Comment;
+use App\Entity\Category;
+use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class FigureFixtures extends Fixture implements DependentFixtureInterface
+
+
+class FigureFixtures extends Fixture 
 {
     public const FIGURE_REFERENCE = 'figure-ref';
 
     public function load(ObjectManager $manager): void
     {
-        $allUsers = [];
-        $allCategories = [];
-        $allComments = [];
+        $allUsers = $manager->getRepository(User::class)->findAll();
+        $allCategories = $manager->getRepository(Category::class)->findAll();
+        $allComments = $manager->getRepository(Comment::class)->findAll();
 
         for ($i = 0; $this->hasReference(UserFixtures::USER_REFERENCE . '_' . $i); $i++) {
             $allUsers[] = $this->getReference(UserFixtures::USER_REFERENCE . '_' . $i);
+
         }
 
         for ($i = 0; $this->hasReference(CategoryFixtures::CATEGORY_REFERENCE . '_' . $i); $i++) {
             $allCategories[] = $this->getReference(CategoryFixtures::CATEGORY_REFERENCE . '_' . $i);
         }
-
-        // Récupérer tous les commentaires
-        $allComments = $manager->getRepository(Comment::class)->findAll();
+        for ($i = 0; $this->hasReference(CommentFixtures::COMMENT_REFERENCE . '_' . $i); $i++) {
+            $allCategories[] = $this->getReference(CommentFixtures::COMMENT_REFERENCE . '_' . $i);
+        }
+               
 
         $figuresData = json_decode(file_get_contents(__DIR__ . '/figuresDatas.json'), true);
 
-        foreach ($figuresData as $figureAttr) {
+        foreach ($figuresData as $index => $figureAttr) {
             if (!empty($figureAttr['name'])) {
                 $figure = new Figure();
                 $image = new Image();
@@ -58,16 +63,24 @@ class FigureFixtures extends Fixture implements DependentFixtureInterface
                 $randomUser = $allUsers[array_rand($allUsers)];
                 $figure->setAuthor($randomUser);
             } else {
-                echo "Aucun utilisateur disponible pour assigner comme auteur à la figure.\n";
-                // Gérer le cas où $allUsers est vide
+                $defaultUser = new User();
+                $defaultUser->setEmail('default@example.com');
+                $defaultUser->setPassword('default_password');
+                $defaultUser->setFirstname('Default');
+                $defaultUser->setLastname('User');
+                $manager->persist($defaultUser);
+                $figure->setAuthor($defaultUser);
             }
 
             if (!empty($allCategories)) {
                 $randomCategory = $allCategories[array_rand($allCategories)];
                 $figure->setCategory($randomCategory);
             } else {
-                echo "Aucune catégorie disponible pour assigner à la figure.\n";
-                // Gérer le cas où $allCategories est vide
+                // Créer une catégorie par défaut
+                $defaultCategory = new Category();
+                $defaultCategory->setName('Default Category');
+                $manager->persist($defaultCategory);
+                $figure->setCategory($defaultCategory);
             }
 
             if (!empty($allComments)) {
@@ -83,7 +96,7 @@ class FigureFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist($figure);
-            $this->addReference(self::FIGURE_REFERENCE . '_' . $i, $figure);
+            $this->addReference(self::FIGURE_REFERENCE . '_' . $index, $figure);
         }
 
         $manager->flush();
@@ -94,11 +107,4 @@ class FigureFixtures extends Fixture implements DependentFixtureInterface
         // Slugify the text
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $text), '-'));
     }
-    public function getDependencies(): array
-    {
-        return [
-            UserFixtures::class,
-
-        ];
-    }
-}
+   }

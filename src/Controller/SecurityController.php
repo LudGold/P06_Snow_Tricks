@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ResetPasswordType;
 use App\Service\EmailConfirmationSender;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,7 +57,6 @@ class SecurityController extends AbstractController
     ): Response {
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
-
             $entityManager = $this->entityManager;
             $user = $entityManager->getRepository(User::class)->findOneByEmail($email);
 
@@ -69,7 +69,6 @@ class SecurityController extends AbstractController
 
                 // Send reset password email
                 $this->emailSender->sendResetPasswordEmail($user, $resetPasswordUrl);
-
 
                 $this->addFlash('success', 'Un e-mail de réinitialisation de mot de passe a été envoyé à votre adresse e-mail.');
             } else {
@@ -91,36 +90,34 @@ class SecurityController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException('Token invalide.');
         }
-    
-        if ($request->isMethod('POST')) {
-            $newPassword = $request->request->get('new_password');
-       
-           // Hashage du nouveau mot de passe
-           $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
 
-           // Réinitialisation du token et enregistrement du nouveau mot de passe haché
-           $user->setResetToken(null);
-           $user->setPassword($hashedPassword);
+        $form = $this->createForm(ResetPasswordType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $newPassword = $form->getData()['password'];
+            
+                // Hashage du nouveau mot de passe
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
+    
+            // Réinitialisation du token et enregistrement du nouveau mot de passe haché
+            $user->setResetToken(null);
+            $user->setPassword($hashedPassword);
             $entityManager->flush();
     
             return $this->redirectToRoute('app_login');
         }
     
-        // Passer la variable resetToken au modèle Twig
-        $resetPasswordUrl = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-    
-        return $this->render('security/new_password.html.twig', [
-            'resetPasswordUrl' => $resetPasswordUrl,
+        // // Passer la variable resetToken au modèle Twig
+        // $resetPasswordUrl = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+        dump($form);
+        return $this->render('security/reset_password.html.twig', [
+            'form' => $form->createView(),
             'token' => $token,
-            'resetToken' => $user->getResetToken(), // Passer resetToken au modèle Twig
+            'resetToken' => $user->getResetToken(),
         ]);
+        
     }
     
-    #[Route(path: '/new-password/{token}', name: 'app_new_password')]
-    public function newPassword(Request $request, string $token): Response
-    {
-        return $this->render('security/new_password.html.twig', [
-            'token' => $token,
-        ]);
-    }
-}
+ }

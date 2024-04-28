@@ -13,8 +13,8 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail existe déjà! ')]
+// #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+// #[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail existe déjà! ')]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
