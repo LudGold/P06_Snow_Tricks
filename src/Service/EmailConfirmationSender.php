@@ -23,7 +23,7 @@ class EmailConfirmationSender
             ->from('noreply@example.com')
             ->to($user->getEmail())
             ->subject('Confirmation Email')
-            ->htmlTemplate('registration/confirmation_email.html.twig')
+            ->htmlTemplate('email/mail_confirmation_register.html.twig')
             ->context([
                 'confirmationUrl' => $confirmationUrl,
             ]);
@@ -36,7 +36,7 @@ class EmailConfirmationSender
             ->from('noreply@example.com')
             ->to($user->getEmail())
             ->subject('Mot de passe oublié')
-            ->htmlTemplate('security/new_password.html.twig')
+            ->htmlTemplate('email/mail_new_password.html.twig')
             ->context([
                 'resetPasswordUrl' => $resetPasswordUrl,
                 'token'  => $user->getResetToken(),
