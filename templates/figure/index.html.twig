@@ -1,20 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FigureController!{% endblock %}
+{% block title %}Liste des figures emblématiques en snow{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/wamp/www/SNOW_TRICKS/src/Controller/FigureController.php</code></li>
-        <li>Your template at <code>D:/wamp/www/SNOW_TRICKS/templates/figure/index.html.twig</code></li>
-    </ul>
-</div>
+    <h1>Liste des Figures</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Nom</th>
+                <th scope="col">Description</th>
+                <th scope="col">Slug</th>
+                 <th scope="col">Action</th>
+                            </tr>
+        </thead>
+              <tbody>
+            {% for figure in figures %}
+                <tr>
+                    <td><a href="{{ path('app_figure_show', {'slug': figure.slug}) }}">{{ figure.name }}</a></td>
+                    <td>{{ figure.description }}</td>
+                    <td>{{ figure.slug }}</td>
+                    <td>
+                        <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{{ path('app_figure_delete', {'id': figure.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('app_figure_new') }}" class="btn btn-primary">Ajouter une nouvelle figure</a>
 {% endblock %}

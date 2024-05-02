@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Figure{% endblock %}
+
+{% block body %}
+    <h1>Détails de la Figure</h1>
+    <p><strong>Nom:</strong> {{ figure.name }}</p>
+    <p><strong>Description:</strong> {{ figure.description }}</p>
+    <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}">Modifier</a>
+    <a href="{{ path('app_figure_index')}}">Retour à l'index</a>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la figure{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="mb-4">Modifier la figure</h1>
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': ''}}) }}
+                <div class="mb-3">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de la figure'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description de la figure'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.createdAt, {'attr': {'class': 'form-control', 'placeholder': 'Date de création'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.slug, {'attr': {'class': 'form-control', 'placeholder': 'Slug'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.author, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.category, {'attr': {'class': 'form-select'}}) }}
+                </div>
+               
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
