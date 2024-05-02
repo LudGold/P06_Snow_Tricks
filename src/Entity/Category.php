@@ -21,11 +21,7 @@ class Category
     #[ORM\OneToMany(targetEntity: Figure::class, mappedBy: 'category')]
     private Collection $figures;
 
-    #[ORM\ManyToOne(inversedBy: 'categories_id')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Figure $figureId = null;
 
-    
     public function __construct()
     {
         $this->figures = new ArrayCollection();
@@ -60,7 +56,7 @@ class Category
     {
         if (!$this->figures->contains($figure)) {
             $this->figures->add($figure);
-            $figure->setCategories($this);
+            $figure->setCategory($this);
         }
 
         return $this;
@@ -70,22 +66,10 @@ class Category
     {
         if ($this->figures->removeElement($figure)) {
             // set the owning side to null (unless already changed)
-            if ($figure->getCategories() === $this) {
-                $figure->setCategories(null);
+            if ($figure->getCategory() === $this) {
+                $figure->setCategory(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getFigureId(): ?Figure
-    {
-        return $this->figureId;
-    }
-
-    public function setFigureId(?Figure $figureId): static
-    {
-        $this->figureId = $figureId;
 
         return $this;
     }

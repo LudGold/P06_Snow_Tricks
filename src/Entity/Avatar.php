@@ -25,6 +25,9 @@ class Avatar
     #[ORM\OneToOne(inversedBy: 'avatar', cascade: ['persist', 'remove'])]
     private ?User $avatars = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageURL = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Avatar
     public function setAvatars(?User $avatars): static
     {
         $this->avatars = $avatars;
+
+        return $this;
+    }
+
+    public function getImageURL(): ?string
+    {
+        return $this->imageURL;
+    }
+
+    public function setImageURL(string $imageURL): static
+    {
+        $this->imageURL = $imageURL;
 
         return $this;
     }
