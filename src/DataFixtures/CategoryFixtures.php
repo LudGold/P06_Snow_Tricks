@@ -19,9 +19,11 @@ class CategoryFixtures extends Fixture
             $category = new Category();
             $category->setName($categoryData['name']);
             $manager->persist($category);
-        }
 
+
+
+            $this->setReference(self::CATEGORY_REFERENCE, $category);
+        }
         $manager->flush();
-        $this->addReference(self::CATEGORY_REFERENCE, $category);
     }
 }

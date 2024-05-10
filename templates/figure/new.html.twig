@@ -5,11 +5,10 @@
 {% block title %}Ajouter une nouvelle Figure{% endblock %}
 
 {% block body %}
-    <h1>Ajouter une nouvelle Figure</h1>
-    {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.slug) }}
-    <button type="submit">Créer</button>
-    {{ form_end(form) }}
+    <h3>Ajouter une nouvelle Figure</h3>
+    <form method="post" enctype="multipart/form-data">
+        {{ form_start(form) }}
+                {{ include('figure/_form.html.twig') }}
+        {{ form_end(form) }}
+    </form>
 {% endblock %}

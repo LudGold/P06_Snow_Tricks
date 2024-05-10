@@ -32,16 +32,16 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'figure')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'figure', cascade:['remove'])]
     private Collection $comments;
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure', cascade: ['persist', 'remove'])]
     private $images;
     
-    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure', cascade: ['persist', 'remove'])]
     private $videos;
     
     #[ORM\ManyToOne(inversedBy: 'figures')]
@@ -177,7 +177,7 @@ class Figure
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
-            $image->setFigures($this);
+            $image->setFigure($this);
         }
 
         return $this;
@@ -187,8 +187,8 @@ class Figure
     {
         if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
-            if ($image->getFigures() === $this) {
-                $image->setFigures(null);
+            if ($image->getFigure() === $this) {
+                $image->setFigure(null);
             }
         }
 
@@ -207,7 +207,7 @@ class Figure
     {
         if (!$this->videos->contains($video)) {
             $this->videos->add($video);
-            $video->setFigures($this);
+            $video->setFigure($this);
         }
 
         return $this;
@@ -217,8 +217,8 @@ class Figure
     {
         if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($video->getFigures() === $this) {
-                $video->setFigures(null);
+            if ($video->getFigure() === $this) {
+                $video->setFigure(null);
             }
         }
 

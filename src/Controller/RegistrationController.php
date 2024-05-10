@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
         // Marquer l'utilisateur comme ayant confirmé son email
         $user->setIsVerified(true);
         $user->setEmailConfirmationToken(null);
-
+        $user->setRoles(['ROLE_USER']);
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
 

@@ -4,22 +4,37 @@ namespace App\Controller;
 
 use App\Repository\FigureRepository;
 use App\Entity\Figure;
-use App\Entity\User;
 use App\Form\FigureType;
-use App\Form\EditFigureType;
+use App\Service\ImageUploader;
+use App\Service\VideoUploader;
+use App\Entity\Image;
+use App\Security\Voter\UserVoter;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/figure', name: 'app_figure_')]
 class FigureController extends AbstractController
 {
+
+    private $slugger;
+    private $entityManager;
+
+    public function __construct(SluggerInterface $slugger, EntityManagerInterface $entityManager)
+    {
+
+        $this->slugger = $slugger;
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(FigureRepository $figureRepository): Response
     {
@@ -30,42 +45,119 @@ class FigureController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-
-    public function create(Request $request, FigureRepository $figureRepository): Response
+    public function create(Request $request, FigureRepository $figureRepository, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
     {
         $figure = new Figure();
+        $form = $this->createForm(FigureType::class, $figure, ['validation_groups' => ['create']]);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            // Vérifiez si l'utilisateur est connecté
+            if ($user) {
+                // Attribuez l'utilisateur actuellement connecté comme auteur de la figure
+                $figure->setAuthor($user);
+
+                // Générez le slug de la figure
+                $slug = $this->slugger->slug($figure->getName());
+                $figure->setSlug(strtolower($slug));
+                // Récupérez les fichiers d'image téléchargés
+                $imageFiles = $form->get('images')->getData();
+           
+                foreach ($imageFiles as $imageFile) {
+                    if ($imageFile instanceof UploadedFile) {
+                        try {
+                            // Utilisez le service ImageUploader pour télécharger le fichier
+                            $newFilename = $imageUploader->upload($imageFile);
+                            ($newFilename);
+                            // Créez une entité Image et associez-la à la figure
+                            $image = new Image();
+                            $image->setPath($newFilename);
+                            $image->setImageName($imageFile->getClientOriginalName());
+                            // Utilisez le nom d'origine du fichier comme nom d'image
+                            $figure->addImage($image);
+                        } catch (FileException $e) {
+                            // Gérer les erreurs de téléchargement de fichier
+                        }
+                    }
+                }
+                $imageUploader->uploadImages($figure);
+                $videoUploader->uploadVideos($figure);
+                // Enregistrez la figure en base de données
+                $figureRepository->save($figure, true);
+
+                $this->addFlash('success', 'La figure a bien été créée');
+
+                // Redirection vers une autre page
+                return $this->redirectToRoute('app_figure_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
+        return $this->render('figure/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    //         $figure->setAuthor($user);
+    //         $figure->setName($form->get('name')->getData());
+    //         $figure->setDescription($form->get('description')->getData());
+    //         $figure->setCategory($form->get('category')->getData());
+
+    //         // Récupérez les images téléchargées
+    //         $imageFiles = $form->get('images')->getData();
+    //         foreach ($imageFiles as $imageFile) {
+    //             if ($imageFile instanceof UploadedFile) {
+    //                 try {
+    //                     // Utilisez le service ImageUploader pour télécharger le fichier
+    //                     $newFilename = $imageUploader->upload($imageFile);
+    //                     // Créez une entité Image si nécessaire et associez-la à la figure
+    //                     $image = new Image();
+    //                     $image->setPath($newFilename);
+    //                     $image->setimageName($newFilename);
+    //                     // Ajoutez l'image à la collection d'images de la figure
+    //         $figure->addImage($image);
+
+    //                 } catch (FileException $e) {
+    //                     // Gérer les erreurs de téléchargement de fichier
+    //                 }
+    //             }
+    //         }
+    //             // Enregistrez la figure en base de données
+    //         $figureRepository->save($figure, true);
+
+    //         $this->addFlash('success', 'La figure a bien été créée');
+
+    //         // Redirection vers une autre page
+    //         return $this->redirectToRoute('app_figure_index', status: Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     // Si le formulaire n'est pas soumis ou n'est pas valide, affichez le formulaire
+    //     return $this->render('figure/new.html.twig', [
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
+
+
+
+
+
+
+    #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER", subject: "figure")]
+    public function edit(Figure $figure, Request $request): Response
+    {
+        // Vérifier si l'utilisateur actuellement connecté est l'auteur de la figure
+        if ($this->getUser() !== $figure->getAuthor()) {
+            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier cette figure.");
+        }
         $form = $this->createForm(FigureType::class, $figure);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Traitement des données du formulaire
-            $figureRepository->save($figure, true);
-            // Redirection vers une autre page par exemple
-            return $this->redirectToRoute('app_figure_index', status: Response::HTTP_SEE_OTHER);
-        }
-        return $this->render(
-            'figure/new.html.twig',
-            [
-                'form' => $form,
-                'figure' => $figure
-            ]
-        );
-    }
 
-    #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    #[IsGranted("", subject: "user")]
-    public function edit(Figure $figure, Request $request, FigureRepository $figureRepository): Response
-    {
-        $form = $this->createForm(EditFigureType::class, $figure);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $figureRepository->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_figure_show', [
-                'id' => $figure->getId()
+                'slug' => $figure->getSlug()
             ], Response::HTTP_SEE_OTHER);
         }
         return $this->render(
@@ -78,27 +170,23 @@ class FigureController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'show', methods: ['GET'])]
-    public function show(Figure $figure): Response
+    public function show(string $slug, FigureRepository $figureRepository): Response
     {
-
+        $figure = $figureRepository->findOneBy(['slug' => $slug]);
+        $images = $figure->getImages();
+        if (!$figure) {
+            throw $this->createNotFoundException('Figure non trouvée');
+        }
         return $this->render('figure/show.html.twig', [
-            'figure' => $figure
+            'figure' => $figure,
+            'images' => $images,
         ]);
     }
-    #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'delete', methods: ['GET', 'POST'])]
     public function delete(Figure $figure, FigureRepository $figureRepository): Response
     {
-        // if (!$this->security->getUser()) {
-        //     throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
-        // }
+        $figureRepository->remove($figure, true);
 
-        // // Vérifie si l'utilisateur actuel est l'auteur de la figure
-        // if ($this->security->getUser() !== $figure->getAuthor()) {
-        //     throw new AccessDeniedHttpException('Vous n\'êtes pas autorisé à supprimer cette figure.');
-        // }
-
-        $figureRepository->remove($figure);
-        $figureRepository->flush();
 
         // Redirige vers la page d'index après la suppression
         return $this->redirectToRoute('app_figure_index');

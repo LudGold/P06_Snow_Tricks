@@ -6,6 +6,19 @@
     <h1>Détails de la Figure</h1>
     <p><strong>Nom:</strong> {{ figure.name }}</p>
     <p><strong>Description:</strong> {{ figure.description }}</p>
+    {% if images is not empty %}
+        <h2>Images:</h2>
+        <ul>
+            {% for image in images %}
+                <li>
+                    <img src="{{ asset(image.path) }}" alt="{{ image.imageName }}">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune image disponible</p>
+    {% endif %}
+  
     <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}">Modifier</a>
     <a href="{{ path('app_figure_index')}}">Retour à l'index</a>
 {% endblock %}

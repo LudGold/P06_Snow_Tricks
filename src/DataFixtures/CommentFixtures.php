@@ -3,22 +3,24 @@
 namespace App\DataFixtures;
 
 use App\Entity\Comment;
-use App\Entity\User;
+use App\DataFixtures\FigureFixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 
-class CommentFixtures extends Fixture 
+class CommentFixtures extends Fixture implements DependentFixtureInterface 
+
 
 {
-    public const COMMENT_REFERENCE = 'comment-figure';
+    public const COMMENT_REFERENCE = 'comment-ref';
 
     public function load(ObjectManager $manager): void
-    {
-        $figures = [];
-        for ($i = 0; $this->hasReference(FigureFixtures::FIGURE_REFERENCE . '_' . $i); $i++) {
+    {$figures = [];
+        $i = 0;
+        while ($this->hasReference(FigureFixtures::FIGURE_REFERENCE . '_' . $i)) {
             $figures[] = $this->getReference(FigureFixtures::FIGURE_REFERENCE . '_' . $i);
+            $i++;
         }
         $users = [];
         for ($i = 0; $this->hasReference(UserFixtures::USER_REFERENCE . '_' . $i); $i++) {
@@ -34,10 +36,10 @@ class CommentFixtures extends Fixture
                       ->setCreatedAt(new \DateTimeImmutable());
 
             // Attribuer aléatoirement une figure au commentaire
-            // $randomFigure = $figures[array_rand($figures)];
-            // $comment->setFigure($randomFigure);
-            // $randomUser = $users[array_rand($users)];
-            // $comment->setUser($randomUser);
+            $randomFigure = $figures[array_rand($figures)];
+            $comment->setFigure($randomFigure);
+            $randomUser = $users[array_rand($users)];
+            $comment->setUser($randomUser);
             $manager->persist($comment);
             $allComments[] = $comment;
             $allUsers[]= $users;
@@ -46,8 +48,14 @@ class CommentFixtures extends Fixture
         $manager->flush();
 
         // Référence unique pour les commentaires
-        $this->addReference(self::COMMENT_REFERENCE, $allComments);
+        $this->addReference(self::COMMENT_REFERENCE, $comment);
     }
-
+    public function getDependencies()
+    {
+        return [
+            FigureFixtures::class,
+            UserFixtures::class,
+        ];
+    }
    
 }
