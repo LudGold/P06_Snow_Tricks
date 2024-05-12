@@ -31,7 +31,7 @@ class FigureType extends AbstractType
                 'choice_label' => 'name',
             ])
             ->add('images', CollectionType::class, [
-                'label' => "images",
+                'label' => false,
                 'entry_type' => ImageType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -40,10 +40,11 @@ class FigureType extends AbstractType
                     new Count(min: 1, minMessage: 'veuillez ajouter une image', groups: ['create', 'edit']),
                     new Valid(),
 
-                ]
+                ],
             ])
+
             ->add('videos', CollectionType::class, [
-                'label' => 'Vidéos',
+                'label' => false,
                 'entry_type' => VideoType::class,
                 'allow_add' => true,
                 'allow_delete' => true,

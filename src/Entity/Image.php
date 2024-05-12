@@ -14,13 +14,11 @@ class Image
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, name: 'image_name')]
+    #[ORM\Column(length: 255)]
     private ?string $image_name = null;
-
 
     #[ORM\Column(length: 255)]
     private ?string $path = null;
-
    
     private ?File $file = null;
 

@@ -8,7 +8,6 @@ use App\Form\FigureType;
 use App\Service\ImageUploader;
 use App\Service\VideoUploader;
 use App\Entity\Image;
-use App\Security\Voter\UserVoter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -16,7 +15,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -63,16 +61,17 @@ class FigureController extends AbstractController
                 $figure->setSlug(strtolower($slug));
                 // Récupérez les fichiers d'image téléchargés
                 $imageFiles = $form->get('images')->getData();
-           
+
                 foreach ($imageFiles as $imageFile) {
                     if ($imageFile instanceof UploadedFile) {
                         try {
                             // Utilisez le service ImageUploader pour télécharger le fichier
                             $newFilename = $imageUploader->upload($imageFile);
-                            ($newFilename);
+
                             // Créez une entité Image et associez-la à la figure
                             $image = new Image();
                             $image->setPath($newFilename);
+
                             $image->setImageName($imageFile->getClientOriginalName());
                             // Utilisez le nom d'origine du fichier comme nom d'image
                             $figure->addImage($image);
@@ -83,6 +82,7 @@ class FigureController extends AbstractController
                 }
                 $imageUploader->uploadImages($figure);
                 $videoUploader->uploadVideos($figure);
+
                 // Enregistrez la figure en base de données
                 $figureRepository->save($figure, true);
 
@@ -92,54 +92,13 @@ class FigureController extends AbstractController
                 return $this->redirectToRoute('app_figure_index', [], Response::HTTP_SEE_OTHER);
             }
         }
-
         return $this->render('figure/new.html.twig', [
             'form' => $form->createView(),
+         
+
         ]);
     }
-    //         $figure->setAuthor($user);
-    //         $figure->setName($form->get('name')->getData());
-    //         $figure->setDescription($form->get('description')->getData());
-    //         $figure->setCategory($form->get('category')->getData());
-
-    //         // Récupérez les images téléchargées
-    //         $imageFiles = $form->get('images')->getData();
-    //         foreach ($imageFiles as $imageFile) {
-    //             if ($imageFile instanceof UploadedFile) {
-    //                 try {
-    //                     // Utilisez le service ImageUploader pour télécharger le fichier
-    //                     $newFilename = $imageUploader->upload($imageFile);
-    //                     // Créez une entité Image si nécessaire et associez-la à la figure
-    //                     $image = new Image();
-    //                     $image->setPath($newFilename);
-    //                     $image->setimageName($newFilename);
-    //                     // Ajoutez l'image à la collection d'images de la figure
-    //         $figure->addImage($image);
-
-    //                 } catch (FileException $e) {
-    //                     // Gérer les erreurs de téléchargement de fichier
-    //                 }
-    //             }
-    //         }
-    //             // Enregistrez la figure en base de données
-    //         $figureRepository->save($figure, true);
-
-    //         $this->addFlash('success', 'La figure a bien été créée');
-
-    //         // Redirection vers une autre page
-    //         return $this->redirectToRoute('app_figure_index', status: Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     // Si le formulaire n'est pas soumis ou n'est pas valide, affichez le formulaire
-    //     return $this->render('figure/new.html.twig', [
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
-
-
-
-
-
+   
 
     #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_USER", subject: "figure")]
@@ -186,8 +145,6 @@ class FigureController extends AbstractController
     public function delete(Figure $figure, FigureRepository $figureRepository): Response
     {
         $figureRepository->remove($figure, true);
-
-
         // Redirige vers la page d'index après la suppression
         return $this->redirectToRoute('app_figure_index');
     }

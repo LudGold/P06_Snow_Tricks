@@ -16,9 +16,6 @@ class Video
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $video = null;
-
     #[ORM\ManyToOne(inversedBy: 'videos')]
     private ?Figure $figure = null;
 
@@ -42,18 +39,7 @@ class Video
         return $this;
     }
 
-    public function getVideo(): ?string
-    {
-        return $this->video;
-    }
-
-    public function setVideo(string $video): static
-    {
-        $this->video = $video;
-
-        return $this;
-    }
-
+ 
     public function getFigure(): ?Figure
     {
         return $this->figure;

@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Figure;
 use App\DataFixtures\CommentFixtures;
 use App\Entity\Category;
-use App\Entity\User;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Image;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -19,10 +19,10 @@ class FigureFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Récupérer toutes les références de commentaires
-        $comments = $this->getReference(CommentFixtures::COMMENT_REFERENCE);
+        // $comments = $this->getReference(CommentFixtures::COMMENT_REFERENCE);
 
         // Récupérer les utilisateurs et les catégories
-        $allUsers = $manager->getRepository(User::class)->findAll();
+        $allUsers = $this->getReference(UserFixtures::USER_REFERENCE);
         $allCategories = $manager->getRepository(Category::class)->findAll();
 
         // Charger les données des figures depuis un fichier JSON
@@ -36,7 +36,6 @@ class FigureFixtures extends Fixture
                 $image->setImageName('img');
                 // $image->setImageFile('file');
                 $video->setName('video');
-                $video->setVideo('nomvideo');
                 $video->setVideoId('urlvideo');
                 $figure->setName($figureAttr['name'])
                     ->addImage($image)
@@ -50,16 +49,13 @@ class FigureFixtures extends Fixture
             }
 
             // Attribuer un auteur et une catégorie de manière aléatoire
-            $randomUser = $allUsers[array_rand($allUsers)];
+            // $randomUser = $allUsers[array_rand($allUsers)];
             $randomCategory = $allCategories[array_rand($allCategories)];
-            $figure->setAuthor($randomUser)
-                   ->setCategory($randomCategory);
-            $comments = $comments->toArray();
-            // Ajouter tous les commentaires à cette figure
-            $randomComment = $comments[array_rand($comments)];
-            $figure->addComment($randomComment);
-
+            // $figure->setAuthor($randomUser)
+            //        ->setCategory($randomCategory);
+     
             $manager->persist($figure);
+
             $this->addReference(self::FIGURE_REFERENCE . '_' . $index, $figure);
         }
 
@@ -72,10 +68,4 @@ class FigureFixtures extends Fixture
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $text), '-'));
     }
 
-    public function getDependencies()
-    {
-        return [
-            CommentFixtures::class,
-        ];
-    }
-}
+  }

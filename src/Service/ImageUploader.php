@@ -20,22 +20,24 @@ class ImageUploader
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $newfileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->getTargetDirectory(), $fileName);
+            $file->move($this->getTargetDirectory(), $newfileName);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
-
-        return $fileName;
+       
+        return $newfileName;
     }
     public function uploadImages(Figure $figure): void
     {
         foreach ($figure->getImages() as $image) {
             if ($image->getFile() !== null) {
-                $image->setImageName($this->upload($image->getFile()));
-            } elseif ($image->getImageName() === null && $image->getFile() === null) {
+                $fileName = $this->upload($image->getFile());
+                $image->setPath($fileName);
+                $image->setImageName($fileName);
+            } elseif ($image->getPath() === null && $image->getFile() === null) {
                 $figure->removeImage($image);
             }
         }

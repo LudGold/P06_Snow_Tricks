@@ -32,7 +32,7 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'figure', cascade:['remove'])]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'figure', cascade: ['remove'])]
     private Collection $comments;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -40,23 +40,22 @@ class Figure
 
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'figure', cascade: ['persist', 'remove'])]
     private $images;
-    
+
     #[ORM\OneToMany(targetEntity: Video::class, mappedBy: 'figure', cascade: ['persist', 'remove'])]
     private $videos;
-    
+
     #[ORM\ManyToOne(inversedBy: 'figures')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
-   
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
-               
     }
- 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -175,8 +174,8 @@ class Figure
 
     public function addImage(Image $image): static
     {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
+        if (!$this->images->contains($image)){
+            $this->images[] = $image;
             $image->setFigure($this);
         }
 
@@ -224,5 +223,4 @@ class Figure
 
         return $this;
     }
-           
 }

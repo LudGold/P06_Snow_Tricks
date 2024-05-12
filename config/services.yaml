@@ -33,5 +33,5 @@ services:
     # Add your service configuration here
     App\Service\ImageUploader:
         arguments:
-            $targetDirectory: '%images_directory%'
+            $targetDirectory: '%kernel.project_dir%/public/uploads/images'
             $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'

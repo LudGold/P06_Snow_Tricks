@@ -1,25 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la figure{% endblock %}
+{% block title %}Edit Trick{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="mb-4">Modifier la figure</h1>
-                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': ''}}) }}
-                <div class="mb-3">
-                    {{ form_row(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de la figure'}}) }}
-                </div>
-                <div class="mb-3">
-                    {{ form_row(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description de la figure'}}) }}
-                </div>
-                <div class="mb-3">
-                    {{ form_row(form.category, {'attr': {'class': 'form-select'}}) }}
-                </div>
-               
-                {{ form_end(form) }}
-            </div>
-        </div>
-    </div>
+    <section class="container">
+        <h1>Modifier la figure</h1>
+
+        {{ include('figure/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('app_figure_index') }}">retour à l'accueil</a>
+
+        {{ include('figure/_delete.html.twig') }}
+    </section>
 {% endblock %}

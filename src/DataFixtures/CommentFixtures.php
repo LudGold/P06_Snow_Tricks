@@ -9,7 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 
-class CommentFixtures extends Fixture implements DependentFixtureInterface 
+class CommentFixtures extends Fixture  
 
 
 {
@@ -50,12 +50,5 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         // Référence unique pour les commentaires
         $this->addReference(self::COMMENT_REFERENCE, $comment);
     }
-    public function getDependencies()
-    {
-        return [
-            FigureFixtures::class,
-            UserFixtures::class,
-        ];
-    }
-   
+    
 }

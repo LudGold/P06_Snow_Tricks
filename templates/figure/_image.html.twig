@@ -1,4 +1,5 @@
 <div>
-    {{ form_row(form.path) }}
-    <button type="button" class="btn btn-danger btn-remove">Supprimer</button>
+	{% set path = form.path.vars.data %}
+	{{ form_row(form.path) }}
+	<button type="button" class="btn btn-danger btn-remove">Supprimer</button>
 </div>
