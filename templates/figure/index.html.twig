@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des figures emblématiques en snow{% endblock %}
+
+{% block body %}
+    <h1>Liste des Figures</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Nom</th>
+                <th scope="col">Description</th>
+                <th scope="col">Slug</th>
+                 <th scope="col">Action</th>
+                            </tr>
+        </thead>
+              <tbody>
+            {% for figure in figures %}
+                <tr>
+                    <td><a href="{{ path('app_figure_show', {'slug': figure.slug}) }}">{{ figure.name }}</a></td>
+                    <td>{{ figure.description }}</td>
+                    <td>{{ figure.slug }}</td>
+                    <td>
+                        <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{{ path('app_figure_delete', {'id': figure.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('app_figure_new') }}" class="btn btn-primary">Ajouter une nouvelle figure</a>
+{% endblock %}
