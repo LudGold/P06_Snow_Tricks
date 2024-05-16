@@ -11,7 +11,7 @@
         {% for image in form.images %}
         {% if image %}
                     <div class="input-media hidden-input">
-                        <img src="{{ asset('uploads/images/') }}{{ image.vars.data.imageName }}" alt="{{ image.vars.data.imageName }}">
+                        <img src="{{ asset('uploads/images/') }}{{ image.vars.data.imageName }}" alt="{{ image.vars.data.imageName }}"class="img-thumbnail">
                         {{ include('figure/_image.html.twig', {form: image}) }}
                     </div>
                     {% else %}
@@ -33,7 +33,7 @@
             {% for video in form.videos %}
                 {% if video %}
                     <div class="input-media hidden-input">
-                        <iframe width="350" height="215" src="https://www.youtube.com/embed/{{ video.vars.data.name }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <iframe width="350" height="215" src="https://www.youtube.com/embed/{{ video.vars.data.videoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         {{ include('figure/_video.html.twig', {form: video}) }}
                     </div>
                     {% else %}

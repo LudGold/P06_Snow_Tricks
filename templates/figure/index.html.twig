@@ -10,10 +10,10 @@
                 <th scope="col">Nom</th>
                 <th scope="col">Description</th>
                 <th scope="col">Slug</th>
-                 <th scope="col">Action</th>
-                            </tr>
+                <th scope="col">Action</th>
+            </tr>
         </thead>
-              <tbody>
+        <tbody>
             {% for figure in figures %}
                 <tr>
                     <td><a href="{{ path('app_figure_show', {'slug': figure.slug}) }}">{{ figure.name }}</a></td>
@@ -23,9 +23,14 @@
                         <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <a href="{{ path('app_figure_delete', {'id': figure.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt "></i></a>
+                        <button class="btn btn-danger" type="submit" form="delete-form-{{ figure.id }}">
+                            <i class="fas fa-trash-alt "></i>
+                        </button>
                     </td>
                 </tr>
+                <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cette figure?');" id="delete-form-{{ figure.id }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
+                </form>
             {% endfor %}
         </tbody>
     </table>

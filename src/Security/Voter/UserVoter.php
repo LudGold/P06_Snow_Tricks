@@ -25,8 +25,10 @@ class UserVoter extends Voter
         if (!$user) {
             return false;
         }
-
+        if ($user !== $figure->getAuthor()){
+            return false;
+        }
         // Vérifie si l'utilisateur est l'auteur de la figure
-        return $user === $figure->getAuthor();
+        return true;
     }
 }

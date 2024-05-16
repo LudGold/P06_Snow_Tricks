@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Repository\FigureRepository;
 use App\Entity\Figure;
+use App\Repository\VideoRepository;
+use App\Repository\CategoryRepository;
 use App\Form\FigureType;
 use App\Service\ImageUploader;
 use App\Service\VideoUploader;
-use App\Entity\Image;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +24,14 @@ class FigureController extends AbstractController
 
     private $slugger;
     private $entityManager;
+    private $categoryRepository;
 
-    public function __construct(SluggerInterface $slugger, EntityManagerInterface $entityManager)
+    public function __construct(SluggerInterface $slugger, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository)
     {
 
         $this->slugger = $slugger;
         $this->entityManager = $entityManager;
+        $this->categoryRepository = $categoryRepository;
     }
 
     #[Route('', name: 'index', methods: ['GET'])]
@@ -55,31 +56,10 @@ class FigureController extends AbstractController
             if ($user) {
                 // Attribuez l'utilisateur actuellement connecté comme auteur de la figure
                 $figure->setAuthor($user);
-
                 // Générez le slug de la figure
                 $slug = $this->slugger->slug($figure->getName());
                 $figure->setSlug(strtolower($slug));
-                // Récupérez les fichiers d'image téléchargés
-                $imageFiles = $form->get('images')->getData();
 
-                foreach ($imageFiles as $imageFile) {
-                    if ($imageFile instanceof UploadedFile) {
-                        try {
-                            // Utilisez le service ImageUploader pour télécharger le fichier
-                            $newFilename = $imageUploader->upload($imageFile);
-
-                            // Créez une entité Image et associez-la à la figure
-                            $image = new Image();
-                            $image->setPath($newFilename);
-
-                            $image->setImageName($imageFile->getClientOriginalName());
-                            // Utilisez le nom d'origine du fichier comme nom d'image
-                            $figure->addImage($image);
-                        } catch (FileException $e) {
-                            // Gérer les erreurs de téléchargement de fichier
-                        }
-                    }
-                }
                 $imageUploader->uploadImages($figure);
                 $videoUploader->uploadVideos($figure);
 
@@ -94,26 +74,31 @@ class FigureController extends AbstractController
         }
         return $this->render('figure/new.html.twig', [
             'form' => $form->createView(),
-         
 
         ]);
     }
-   
 
     #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    #[IsGranted("ROLE_USER", subject: "figure")]
-    public function edit(Figure $figure, Request $request): Response
+    #[IsGranted("", subject: "figure")]
+    #[IsGranted("ROLE_USER")]
+    public function edit(Figure $figure, FigureRepository $figureRepository, Request $request, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
     {
-        // Vérifier si l'utilisateur actuellement connecté est l'auteur de la figure
-        if ($this->getUser() !== $figure->getAuthor()) {
-            throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier cette figure.");
+        foreach ($figure->getImages() as $image) {
+            $image->setFile(
+                new File($this->getParameter('images_directory') . '/' . $image->getImageName())
+            );
         }
+
         $form = $this->createForm(FigureType::class, $figure);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->entityManager->flush();
+            $imageUploader->uploadImages($figure);
+            $videoUploader->uploadVideos($figure);
+
+            // Enregistrez la figure en base de données
+            $figureRepository->save($figure, true);
 
             return $this->redirectToRoute('app_figure_show', [
                 'slug' => $figure->getSlug()
@@ -129,9 +114,13 @@ class FigureController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'show', methods: ['GET'])]
-    public function show(string $slug, FigureRepository $figureRepository): Response
+    public function show(string $slug, FigureRepository $figureRepository, VideoRepository $videoRepository): Response
+
     {
         $figure = $figureRepository->findOneBy(['slug' => $slug]);
+        $categories = $this->categoryRepository->findAll();
+        $videos = $videoRepository->findBy(['figure' => $figure]);
+
         $images = $figure->getImages();
         if (!$figure) {
             throw $this->createNotFoundException('Figure non trouvée');
@@ -139,12 +128,18 @@ class FigureController extends AbstractController
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
             'images' => $images,
+            'videos' => $videos,
+            'categories' => $categories
         ]);
     }
-    #[Route('/delete/{id}', name: 'delete', methods: ['GET', 'POST'])]
+    #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
+    #[IsGranted("", subject: "figure")]
+    #[IsGranted("ROLE_USER")]
     public function delete(Figure $figure, FigureRepository $figureRepository): Response
     {
         $figureRepository->remove($figure, true);
+        $this->addFlash('success', 'La figure a bien été supprimée');
+
         // Redirige vers la page d'index après la suppression
         return $this->redirectToRoute('app_figure_index');
     }
