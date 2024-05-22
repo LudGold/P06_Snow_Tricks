@@ -22,10 +22,10 @@ class SecurityController extends AbstractController
     private $passwordHasher;
 
     public function __construct(
-        EntityManagerInterface $entityManager, 
+        EntityManagerInterface $entityManager,
         EmailConfirmationSender $emailSender,
-        UserPasswordHasherInterface $passwordHasher)
-    {
+        UserPasswordHasherInterface $passwordHasher
+    ) {
         $this->entityManager = $entityManager;
         $this->emailSender = $emailSender;
         $this->passwordHasher = $passwordHasher;
@@ -86,7 +86,7 @@ class SecurityController extends AbstractController
     {
         $entityManager = $this->entityManager;
         $user = $entityManager->getRepository(User::class)->findOneBy(['resetToken' => $token]);
-        
+
         if (!$user) {
             throw $this->createNotFoundException('Token invalide.');
         }
@@ -95,29 +95,27 @@ class SecurityController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $newPassword = $form->getData()['password'];
-            
-                // Hashage du nouveau mot de passe
+
+            // Hashage du nouveau mot de passe
             $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
-    
+
             // Réinitialisation du token et enregistrement du nouveau mot de passe haché
             $user->setResetToken(null);
             $user->setPassword($hashedPassword);
             $entityManager->flush();
-    
+
             return $this->redirectToRoute('app_login');
         }
-    
+
         // // Passer la variable resetToken au modèle Twig
-        // $resetPasswordUrl = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-        dump($form);
+        $resetPasswordUrl = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
         return $this->render('security/reset_password.html.twig', [
             'form' => $form->createView(),
-            'token' => $token,
+            'token' => $resetPasswordUrl,
             'resetToken' => $user->getResetToken(),
         ]);
-        
     }
-    
- }
+}

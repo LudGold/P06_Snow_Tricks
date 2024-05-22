@@ -5,12 +5,15 @@ namespace App\DataFixtures;
 use App\Entity\Figure;
 use App\Entity\Image;
 use App\Entity\Video;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 
+class FigureFixtures extends Fixture implements DependentFixtureInterface
 class FigureFixtures extends Fixture implements DependentFixtureInterface
 {
     public const FIGURE_REFERENCE = 'figure-ref';
