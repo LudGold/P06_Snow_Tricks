@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -14,29 +15,29 @@ class Image
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    private ?string $path = null;
+    private ?string $image_name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    private ?string $path = null;
+   
+    private ?File $file = null;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
-    private ?Figure $figures = null;
+    private ?Figure $figure = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getImageName(): ?string
     {
-        return $this->name;
+        return $this->image_name;
     }
 
-    public function setName(string $name): static
+    public function setImageName(string $image_name): static
     {
-        $this->name = $name;
+        $this->image_name = $image_name;
 
         return $this;
     }
@@ -53,27 +54,28 @@ class Image
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getFile(): ?File
     {
-        return $this->image;
+        return $this->file;
     }
 
-    public function setImage(string $image): static
+    public function setFile(?File $file): self
     {
-        $this->image = $image;
+        $this->file = $file;
 
         return $this;
     }
 
-    public function getFigures(): ?Figure
+    public function getFigure(): ?Figure
     {
-        return $this->figures;
+        return $this->figure;
     }
 
-    public function setFigures(?Figure $figures): static
+    public function setFigure(?Figure $figure): static
     {
-        $this->figures = $figures;
+        $this->figure = $figure;
 
         return $this;
     }
+    
 }

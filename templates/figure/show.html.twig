@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Figure
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="text-center">
+					<h1>{{ figure.name }}</h1>
+				</div>
+
+				<div class="mt-4">
+					<div class="row">
+						{% for image in images %}
+							<div class="col-md-4 mb-3">
+								<img src="{{ asset('uploads/images/') }}{{image.imageName }}" alt="{{ image.imageName }}" class="img-thumbnail">
+							</div>
+						{% endfor %}
+						{% for video in videos %}
+							<div class="col-md-4 mb-3">
+
+								<iframe width="350" height="215" src="https://www.youtube.com/embed/{{ video.videoId }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="mt-4">
+					<p>{{ figure.description }}</p>
+				</div>
+
+				<div class="mt-4">
+					<div class="form-group">
+						<label for="category">Catégorie:</label>
+						<select id="category" name="category" class="form-control">
+							{% for category in categories %}
+								<option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>{{ category.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="mt-4">
+
+					<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2">
+						<i class="bi bi-pencil"></i>
+						Modifier
+					</a>
+					<form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette figure?');" style="display: inline-block;">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
+						<button class="btn btn-danger" type="submit">
+							<i class="fas fa-trash-alt"></i>
+							Supprimer
+						</button>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

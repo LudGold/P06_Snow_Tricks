@@ -12,19 +12,19 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
+    public const USER_REFERENCE = "user-ref";
+
     public function __construct(
         private UserPasswordHasherInterface $hasher,
     ) {
     }
 
-    public const USER_REFERENCE = "user-ref";
-
     public function load(ObjectManager $manager): void
     {
         $usersDatas = json_decode(file_get_contents(__DIR__ . '/usersDatas.json'), true);
-        $allUsers = [];
 
 
+        $i = 0;
         foreach ($usersDatas as $userAtt) {
             $user = $this->createUser(
                 $userAtt['firstName'],
@@ -34,11 +34,12 @@ class UserFixtures extends Fixture
             );
             $manager->persist($user);
 
-            $allUsers[] = $user;
+            $this->addReference(self::USER_REFERENCE . '-' . $i, $user);
+            $i++;
         }
         $manager->flush();
     }
-    private function createUser(string $firstName, string $lastName,string $email, string $password): User
+    private function createUser(string $firstName, string $lastName, string $email, string $password): User
     {
         $user = new User();
         $user->setFirstname($firstName)
@@ -54,8 +55,6 @@ class UserFixtures extends Fixture
         $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
         $avatar->setAvatar('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
         $user->setAvatar($avatar);
-
-        $this->addReference(self::USER_REFERENCE . '_' . $firstName . '-' . $lastName, $user);
 
         return $user;
     }

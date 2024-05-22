@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Trick{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Modifier la figure</h1>
+
+        {{ include('figure/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('app_figure_index') }}">retour à l'accueil</a>
+
+        {{ include('figure/_delete.html.twig') }}
+    </section>
+{% endblock %}
