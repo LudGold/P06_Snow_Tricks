@@ -148,10 +148,14 @@ class FigureController extends AbstractController
         ]);
     }
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
-    #[IsGranted("", subject: "figure")]
+    #[IsGranted("DELETE", subject: "figure")]
     #[IsGranted("ROLE_USER")]
     public function delete(Figure $figure, FigureRepository $figureRepository): Response
     {
+        if (!$this->isGranted('DELETE', $figure)) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit de supprimer cette figure.');
+        }
+        
         $figureRepository->remove($figure, true);
         $this->addFlash('success', 'La figure a bien été supprimée');
 
