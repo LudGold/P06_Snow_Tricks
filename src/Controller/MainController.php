@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MainController extends AbstractController
 {
-    #[Route('/')]
+    #[Route('/', name: 'homepage')]
     public function homepage()
     {
 

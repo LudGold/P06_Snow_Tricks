@@ -11,6 +11,7 @@ use App\Service\ImageUploader;
 use App\Service\VideoUploader;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,18 +24,18 @@ class FigureController extends AbstractController
 {
 
     private $slugger;
-    private $entityManager;
     private $categoryRepository;
 
-    public function __construct(SluggerInterface $slugger, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository)
+
+
+    public function __construct(SluggerInterface $slugger, CategoryRepository $categoryRepository)
     {
 
         $this->slugger = $slugger;
-        $this->entityManager = $entityManager;
         $this->categoryRepository = $categoryRepository;
     }
 
-    #[Route('', name: 'index', methods: ['GET'])]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(FigureRepository $figureRepository): Response
     {
         $figures = $figureRepository->findAll();
@@ -44,6 +45,7 @@ class FigureController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+
     public function create(Request $request, FigureRepository $figureRepository, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
     {
         $figure = new Figure();
@@ -79,10 +81,22 @@ class FigureController extends AbstractController
     }
 
     #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    #[IsGranted("", subject: "figure")]
     #[IsGranted("ROLE_USER")]
-    public function edit(Figure $figure, FigureRepository $figureRepository, Request $request, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
-    {
+    #[IsGranted("", subject: "figure")]
+
+    #[Route('/figure/edit/{id}', name: 'figure_edit')]
+    public function edit(
+        Figure $figure,
+        FigureRepository $figureRepository,
+        Request $request,
+        ImageUploader $imageUploader,
+        VideoUploader $videoUploader
+    ): Response {
+        // Vérification de l'autorisation
+        if (!$this->isGranted('EDIT', $figure)) {
+            throw new AccessDeniedException('Vous n\'avez pas le droit de modifier cette figure.');
+        }
+
         foreach ($figure->getImages() as $image) {
             $image->setFile(
                 new File($this->getParameter('images_directory') . '/' . $image->getImageName())
@@ -93,7 +107,6 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $imageUploader->uploadImages($figure);
             $videoUploader->uploadVideos($figure);
 
@@ -104,6 +117,7 @@ class FigureController extends AbstractController
                 'slug' => $figure->getSlug()
             ], Response::HTTP_SEE_OTHER);
         }
+
         return $this->render(
             'figure/edit.html.twig',
             [
@@ -112,6 +126,7 @@ class FigureController extends AbstractController
             ]
         );
     }
+
 
     #[Route('/{slug}', name: 'show', methods: ['GET'])]
     public function show(string $slug, FigureRepository $figureRepository, VideoRepository $videoRepository): Response

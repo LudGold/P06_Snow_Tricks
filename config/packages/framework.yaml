@@ -1,4 +1,5 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
+# config/packages/framework.yaml
+
 framework:
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
@@ -9,6 +10,7 @@ framework:
     translator: { fallbacks: ['en'] }
     #esi: true
     #fragments: true
+    error_controller: 'App\Controller\ExceptionController::showError' 
 
 when@test:
     framework:

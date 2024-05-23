@@ -39,7 +39,8 @@ class RegistrationController extends AbstractController
             );
             // Générer le token de confirmation d'email
             $user->generateEmailConfirmationToken();
-
+            $this->addFlash('success', 'Un
+            email a été envoyé afin de valider votre inscription.');
             $entityManager->persist($user);
             $entityManager->flush();
             // URL de confirmation

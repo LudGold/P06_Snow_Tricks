@@ -15,6 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
+
 class SecurityController extends AbstractController
 {
     private $entityManager;
@@ -118,4 +119,5 @@ class SecurityController extends AbstractController
             'resetToken' => $user->getResetToken(),
         ]);
     }
+    
 }

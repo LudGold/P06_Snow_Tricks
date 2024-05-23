@@ -5,13 +5,14 @@ use App\Entity\Figure;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserVoter extends Voter
 {
     protected function supports(string $attribute, mixed $subject): bool
     {
 
-        return $subject instanceof Figure;
+        return in_array($attribute, ['EDIT']) && $subject instanceof Figure;
     }
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
@@ -20,7 +21,7 @@ class UserVoter extends Voter
 
         /** @var User|null $user */
         $user = $token->getUser();
-
+       
         // Si l'utilisateur n'est pas connecté, il n'a pas accès
         if (!$user) {
             return false;
