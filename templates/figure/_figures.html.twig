@@ -10,6 +10,7 @@
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ figure.name }}</h5>
+                {% if app.user and app.user == figure.getAuthor() %}
                 <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary">
                     <i class="bi bi-pencil"></i>
                 </a>
@@ -19,6 +20,7 @@
                 <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cette figure?');" id="delete-form-{{ figure.id }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
                 </form>
+                  {% endif %}
             </div>
         </div>
     </div>
