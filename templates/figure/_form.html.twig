@@ -5,6 +5,7 @@
 </div>
 {{ form_row(form.description) }}
 {{ form_row(form.category) }}
+
 <div id="trick_images" data-prototype="{{ include('figure/_image.html.twig', {form: form.images.vars.prototype})|e('html_attr') }}" data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}">
     <div class="images-fields">
         {{ form_errors(form.images) }}

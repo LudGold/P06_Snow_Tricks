@@ -10,7 +10,7 @@ framework:
     translator: { fallbacks: ['en'] }
     #esi: true
     #fragments: true
-    error_controller: 'App\Controller\ExceptionController::showError' 
+    # error_controller: 'App\Controller\ExceptionController::showError' 
 
 when@test:
     framework:

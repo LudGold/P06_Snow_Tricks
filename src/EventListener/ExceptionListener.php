@@ -9,20 +9,20 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ExceptionListener
 {
-    private RouterInterface $router;
+    // private RouterInterface $router;
 
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
+    // public function __construct(RouterInterface $router)
+    // {
+    //     $this->router = $router;
+    // }
 
-    public function onKernelException(ExceptionEvent $event): void
-    {
-        $exception = $event->getThrowable();
+    // public function onKernelException(ExceptionEvent $event): void
+    // {
+    //     $exception = $event->getThrowable();
 
-        if ($exception instanceof AccessDeniedHttpException) {
-            $response = new RedirectResponse($this->router->generate('access_denied'));
-            $event->setResponse($response);
-        }
-    }
+    //     if ($exception instanceof AccessDeniedHttpException) {
+    //         $response = new RedirectResponse($this->router->generate('access_denied'));
+    //         $event->setResponse($response);
+    //     }
+    // }
 }

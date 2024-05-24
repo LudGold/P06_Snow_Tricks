@@ -36,6 +36,6 @@ services:
             $targetDirectory: '%kernel.project_dir%/public/uploads/images'
             $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
 
-    App\EventListener\ExceptionListener:
-        tags:
-            - { name: 'kernel.event_listener', event: 'kernel.exception' }       
+    # App\EventListener\ExceptionListener:
+    #     tags:
+    #         - { name: 'kernel.event_listener', event: 'kernel.exception' }       

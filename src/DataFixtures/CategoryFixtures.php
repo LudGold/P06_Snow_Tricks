@@ -10,7 +10,8 @@ use Doctrine\Persistence\ObjectManager;
 class CategoryFixtures extends Fixture
 {
     public const CATEGORY_REFERENCE = 'category-ref';
-    public function load(ObjectManager $manager): void
+    
+    public function load (ObjectManager $manager): void
     {
 
         $categoriesData = json_decode(file_get_contents(__DIR__ . '/categoriesDatas.json'), true);

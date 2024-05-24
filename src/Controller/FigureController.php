@@ -10,27 +10,22 @@ use App\Form\FigureType;
 use App\Service\ImageUploader;
 use App\Service\VideoUploader;
 use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/figure', name: 'app_figure_')]
 class FigureController extends AbstractController
 {
-
     private $slugger;
     private $categoryRepository;
 
-
-
     public function __construct(SluggerInterface $slugger, CategoryRepository $categoryRepository)
     {
-
         $this->slugger = $slugger;
         $this->categoryRepository = $categoryRepository;
     }
@@ -38,14 +33,14 @@ class FigureController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(FigureRepository $figureRepository): Response
     {
-        $figures = $figureRepository->findAll();
+        
+        $figures = $figureRepository->findBy([], null);
         return $this->render('figure/index.html.twig', [
             'figures' => $figures,
         ]);
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-
     public function create(Request $request, FigureRepository $figureRepository, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
     {
         $figure = new Figure();
@@ -54,49 +49,31 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
-            // Vérifiez si l'utilisateur est connecté
             if ($user) {
-                // Attribuez l'utilisateur actuellement connecté comme auteur de la figure
                 $figure->setAuthor($user);
-                // Générez le slug de la figure
                 $slug = $this->slugger->slug($figure->getName());
                 $figure->setSlug(strtolower($slug));
 
                 $imageUploader->uploadImages($figure);
                 $videoUploader->uploadVideos($figure);
 
-                // Enregistrez la figure en base de données
                 $figureRepository->save($figure, true);
 
                 $this->addFlash('success', 'La figure a bien été créée');
 
-                // Redirection vers une autre page
                 return $this->redirectToRoute('app_figure_index', [], Response::HTTP_SEE_OTHER);
             }
         }
         return $this->render('figure/new.html.twig', [
             'form' => $form->createView(),
-
         ]);
     }
 
     #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
-    #[IsGranted("ROLE_USER")]
-    #[IsGranted("", subject: "figure")]
-
-    #[Route('/figure/edit/{id}', name: 'figure_edit')]
-    public function edit(
-        Figure $figure,
-        FigureRepository $figureRepository,
-        Request $request,
-        ImageUploader $imageUploader,
-        VideoUploader $videoUploader
-    ): Response {
-        // Vérification de l'autorisation
-        if (!$this->isGranted('EDIT', $figure)) {
-            throw new AccessDeniedException('Vous n\'avez pas le droit de modifier cette figure.');
-        }
-
+    #[IsGranted('ROLE_USER')]
+    #[IsGranted('', subject: 'figure')]
+    public function edit(Figure $figure, FigureRepository $figureRepository, Request $request, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
+    {
         foreach ($figure->getImages() as $image) {
             $image->setFile(
                 new File($this->getParameter('images_directory') . '/' . $image->getImageName())
@@ -110,7 +87,6 @@ class FigureController extends AbstractController
             $imageUploader->uploadImages($figure);
             $videoUploader->uploadVideos($figure);
 
-            // Enregistrez la figure en base de données
             $figureRepository->save($figure, true);
 
             return $this->redirectToRoute('app_figure_show', [
@@ -118,19 +94,14 @@ class FigureController extends AbstractController
             ], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render(
-            'figure/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'figure' => $figure
-            ]
-        );
+        return $this->render('figure/edit.html.twig', [
+            'form' => $form->createView(),
+            'figure' => $figure,
+        ]);
     }
-
 
     #[Route('/{slug}', name: 'show', methods: ['GET'])]
     public function show(string $slug, FigureRepository $figureRepository, VideoRepository $videoRepository): Response
-
     {
         $figure = $figureRepository->findOneBy(['slug' => $slug]);
         $categories = $this->categoryRepository->findAll();
@@ -144,22 +115,34 @@ class FigureController extends AbstractController
             'figure' => $figure,
             'images' => $images,
             'videos' => $videos,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
+
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
-    #[IsGranted("DELETE", subject: "figure")]
-    #[IsGranted("ROLE_USER")]
+    #[IsGranted('ROLE_USER')]
+    #[IsGranted('', subject: 'figure')]
     public function delete(Figure $figure, FigureRepository $figureRepository): Response
     {
-        if (!$this->isGranted('DELETE', $figure)) {
-            throw new AccessDeniedException('Vous n\'avez pas le droit de supprimer cette figure.');
-        }
-        
         $figureRepository->remove($figure, true);
         $this->addFlash('success', 'La figure a bien été supprimée');
 
-        // Redirige vers la page d'index après la suppression
         return $this->redirectToRoute('app_figure_index');
+    }
+
+    #[Route('/more-figures', name: 'more_figures', methods: ['GET'])]
+    public function moreFigures(Request $request, FigureRepository $figureRepository): Response
+    {
+        $page = $request->query->getInt('page', 1);
+        $limit = 6; // Nombre de figures à charger par page
+        $figures = $figureRepository->findBy([], null, $limit, ($page - 1) * $limit);
+
+        if (!$figures) {
+            return new Response('', 204); // No Content
+        }
+
+        return $this->render('figure/_figures.html.twig', [
+            'figures' => $figures,
+        ]);
     }
 }

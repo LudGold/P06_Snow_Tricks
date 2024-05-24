@@ -1,9 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BONJOUR{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Page d'accueil</h1>
+    <div class="container">
+        {# Bloc d'image de fond et de la phrase h1 #}
+        <div class="position-relative">
+            <img src="{{ asset('/uploads/images/backflip.jpg') }}" alt="Image de snowboard" class="img-fluid" style="width: 100%; height: auto;">
+            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                <h1>La page de référence des figures de snow !</h1>
+            </div>
+        </div>
+
+        <div class="row" id="figures-container">
+            {% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 6)} %}
+        </div>
+        
+        {% if figures|length > 6 %}
+		 <div class="d-flex justify-content-center mt-4">
+            <button id="load-more-btn" class="btn btn-primary mt-4">LOAD MORE TRICKS</button>
+			<button id="load-less-btn" class="btn btn-secondary mt-4" style="display: none;">-</button>
+			 </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
-
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('app.js') }}"></script>
+{% endblock %}

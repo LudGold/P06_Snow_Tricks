@@ -1,3 +1,27 @@
 body {
     background-color: skyblue;
 }
+.position-relative{
+    margin-bottom: 50px;
+}
+.card {
+    border: none;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.title-card a{
+    text-decoration: none;
+    color: black;
+}
+.home-btn{
+    width: 40px;
+  
+}
