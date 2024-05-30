@@ -4,13 +4,15 @@ namespace App\Controller;
 
 use App\Repository\FigureRepository;
 use App\Entity\Figure;
+use App\Entity\Comment;
 use App\Repository\VideoRepository;
 use App\Repository\CategoryRepository;
 use App\Form\FigureType;
+use App\Form\CommentType;
 use App\Service\ImageUploader;
 use App\Service\VideoUploader;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +108,8 @@ class FigureController extends AbstractController
         $figure = $figureRepository->findOneBy(['slug' => $slug]);
         $categories = $this->categoryRepository->findAll();
         $videos = $videoRepository->findBy(['figure' => $figure]);
-
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
         $images = $figure->getImages();
         if (!$figure) {
             throw $this->createNotFoundException('Figure non trouvée');
@@ -116,6 +119,8 @@ class FigureController extends AbstractController
             'images' => $images,
             'videos' => $videos,
             'categories' => $categories,
+            'form' => $form,
+            
         ]);
     }
 

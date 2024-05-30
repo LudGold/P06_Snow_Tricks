@@ -15,7 +15,8 @@
         <div class="row" id="figures-container">
             {% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 6)} %}
         </div>
-        
+        <a href="{{ path('app_figure_new') }}" class="btn btn-primary mt-4">Ajouter une nouvelle figure</a>
+
         {% if figures|length > 6 %}
 		 <div class="d-flex justify-content-center mt-4">
             <button id="load-more-btn" class="btn btn-primary mt-4">LOAD MORE TRICKS</button>

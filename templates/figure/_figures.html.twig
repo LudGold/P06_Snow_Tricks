@@ -2,7 +2,9 @@
 
 {% for figure in figures %}
     <div class="col-md-4 mb-4">
+     
         <div class="card">
+        <a href="{{ path('app_figure_show', {'slug': figure.slug}) }}">
             {% if figure.images|length > 0 %}
                 <img src="{{ asset('uploads/images/' ~ figure.images[0].getImageName()) }}" class="card-img-top" alt="{{ figure.name }}">
             {% else %}
@@ -19,7 +21,27 @@
                 <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cette figure?');" id="delete-form-{{ figure.id }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
                 </form>
+<<<<<<< Updated upstream
+=======
+                  {% endif %}
+             <hr>
+
+                <h6>Comments:</h6>
+                <ul class="list-unstyled">
+                    {% for comment in figure.comments %}
+                        <li class="media">
+                            <img src="{{ comment.user.avatar.imageURL }}" class="mr-3" alt="Avatar" style="width: 100px; height: 100px;">
+                            <div class="media-body">
+                                 <h6 class="mt-0 mb-1">{{ comment.user.fullName }}</h6> 
+                                <p>{{ comment.content }}</p>
+                                <small class="text-muted">{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+>>>>>>> Stashed changes
             </div>
         </div>
     </div>
 {% endfor %}
+

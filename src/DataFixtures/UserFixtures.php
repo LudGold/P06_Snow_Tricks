@@ -53,7 +53,6 @@ class UserFixtures extends Fixture
         $avatar->setName('avatar');
         $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
         $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-        $avatar->setAvatar('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
         $user->setAvatar($avatar);
 
         return $user;

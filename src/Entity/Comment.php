@@ -78,13 +78,7 @@ class Comment
         return $this;
     }
 
-    public function getFullName(): ?string
-    {
-        $this->fullName = $this->user->getFirstName() . " " . $this->user->getLastName();
-        return $this->fullName;
-    }
-
-    public function getFigure(): ?Figure
+     public function getFigure(): ?Figure
     {
         return $this->figure;
     }

@@ -2,18 +2,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Figures{% endblock %}
-{# 
+
 {% block body %}
     <div class="container">
         <h1>Figures</h1>
         <div class="row" id="figures-container">
             {% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 6)} %}
         </div>
+        
         {% if figures|length > 6 %}
             <button id="load-more-btn" class="btn btn-primary mt-4">Load more</button>
         {% endif %}
     </div>
-{% endblock %} #}
+{% endblock %}
 
 
 

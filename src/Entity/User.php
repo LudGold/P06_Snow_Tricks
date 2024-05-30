@@ -6,15 +6,15 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-// #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-// #[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail existe déjà! ')]
 
+#[UniqueEntity(fields:['email'], message: 'cet e-mail est déjà enregistré')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     /**
@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid')]
     private ?Uuid $userUuid = null;
 
-    #[ORM\OneToOne(mappedBy: 'avatars', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Avatar $avatar = null;
 
     #[ORM\Column(length: 32, nullable: true)]
@@ -246,6 +246,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 
     public function isVerified(): bool
     {
@@ -280,12 +284,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // unset the owning side of the relation if necessary
         if ($avatar === null && $this->avatar !== null) {
-            $this->avatar->setAvatars(null);
+            $this->avatar->setUser(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($avatar !== null && $avatar->getAvatars() !== $this) {
-            $avatar->setAvatars($this);
+        if ($avatar !== null && $avatar->getUser() !== $this) {
+            $avatar->setUser($this);
         }
 
         $this->avatar = $avatar;

@@ -17,6 +17,7 @@ class MainController extends AbstractController
         $figures = $figureRepository->findAll();
         return $this->render('home_page.html.twig', [
             'figures' => $figures,
+            
         ]);
     }
 
