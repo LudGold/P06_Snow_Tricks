@@ -14,6 +14,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 
+
+
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
@@ -29,7 +31,12 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+            if ($existingUser) {
+                $this->addFlash('error', 'Cet e-mail a déjà été enregistré.');
+                return $this->redirectToRoute('app_register');
+                
+            }
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -39,7 +46,8 @@ class RegistrationController extends AbstractController
             );
             // Générer le token de confirmation d'email
             $user->generateEmailConfirmationToken();
-
+            $this->addFlash('success', 'Un
+            email a été envoyé afin de valider votre inscription.');
             $entityManager->persist($user);
             $entityManager->flush();
             // URL de confirmation
@@ -48,7 +56,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
             $emailConfirmationSender->sendConfirmationEmail($user, $confirmationUrl);
 
-            return $this->redirectToRoute('app_main_homepage');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -80,6 +88,6 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         // Rediriger vers une page après la confirmation de l'email
-        return $this->redirectToRoute('app_main_homepage');
+        return $this->redirectToRoute('homepage');
     }
 }

@@ -1,4 +1,37 @@
+{# templates/figure/index.html.twig #}
 {% extends 'base.html.twig' %}
+
+{% block title %}Figures{% endblock %}
+{# 
+{% block body %}
+    <div class="container">
+        <h1>Figures</h1>
+        <div class="row" id="figures-container">
+            {% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 6)} %}
+        </div>
+        {% if figures|length > 6 %}
+            <button id="load-more-btn" class="btn btn-primary mt-4">Load more</button>
+        {% endif %}
+    </div>
+{% endblock %} #}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Liste des figures emblématiques en snow{% endblock %}
 
@@ -24,7 +57,7 @@
                             <i class="bi bi-pencil"></i>
                         </a>
                         <button class="btn btn-danger" type="submit" form="delete-form-{{ figure.id }}">
-                            <i class="fas fa-trash-alt "></i>
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>
@@ -35,4 +68,4 @@
         </tbody>
     </table>
     <a href="{{ path('app_figure_new') }}" class="btn btn-primary">Ajouter une nouvelle figure</a>
-{% endblock %}
+{% endblock %} #}
