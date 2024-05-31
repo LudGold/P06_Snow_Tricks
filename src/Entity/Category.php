@@ -62,7 +62,7 @@ class Category
         return $this;
     }
 
-    public function removeFigure(Figure $figure): static
+    public function removeFigure(Figure $figure): self
     {
         if ($this->figures->removeElement($figure)) {
             // set the owning side to null (unless already changed)

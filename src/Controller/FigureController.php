@@ -5,14 +5,14 @@ namespace App\Controller;
 use App\Repository\FigureRepository;
 use App\Entity\Figure;
 use App\Entity\Comment;
-use App\Repository\VideoRepository;
+use App\Repository\CommentRepository;
 use App\Repository\CategoryRepository;
 use App\Form\FigureType;
 use App\Form\CommentType;
 use App\Service\ImageUploader;
 use App\Service\VideoUploader;
 use Symfony\Component\HttpFoundation\File\File;
-
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,18 +24,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FigureController extends AbstractController
 {
     private $slugger;
-    private $categoryRepository;
+   
 
-    public function __construct(SluggerInterface $slugger, CategoryRepository $categoryRepository)
+    public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
-        $this->categoryRepository = $categoryRepository;
+        
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(FigureRepository $figureRepository): Response
     {
-        
+
         $figures = $figureRepository->findBy([], null);
         return $this->render('figure/index.html.twig', [
             'figures' => $figures,
@@ -103,24 +103,21 @@ class FigureController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'show', methods: ['GET'])]
-    public function show(string $slug, FigureRepository $figureRepository, VideoRepository $videoRepository): Response
+    public function show(?Figure $figure, CommentRepository $commentRepository,CategoryRepository $categoryRepository ): Response
     {
-        $figure = $figureRepository->findOneBy(['slug' => $slug]);
-        $categories = $this->categoryRepository->findAll();
-        $videos = $videoRepository->findBy(['figure' => $figure]);
+        $comments = $commentRepository->findBy(['figure' => $figure]);
+        $categories = $categoryRepository->findAll();
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
-        $images = $figure->getImages();
+
         if (!$figure) {
             throw $this->createNotFoundException('Figure non trouvée');
         }
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
-            'images' => $images,
-            'videos' => $videos,
+            'comments' => $comments,
             'categories' => $categories,
-            'form' => $form,
-            
+            'form' => $form ->createView(),
         ]);
     }
 

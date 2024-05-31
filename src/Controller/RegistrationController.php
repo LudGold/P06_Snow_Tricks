@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Avatar;
 use App\Service\EmailConfirmationSender;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,11 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
-
+        $avatar = new Avatar();
+        $avatar->setName('avatar');
+        $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $user->setAvatar($avatar);
         if ($form->isSubmitted() && $form->isValid()) {
 
             // encode the plain password
@@ -49,7 +54,7 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
             $emailConfirmationSender->sendConfirmationEmail($user, $confirmationUrl);
 
-            return $this->redirectToRoute('app_main_homepage');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -81,6 +86,6 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         // Rediriger vers une page après la confirmation de l'email
-        return $this->redirectToRoute('app_main_homepage');
+        return $this->redirectToRoute('homepage');
     }
 }

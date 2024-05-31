@@ -12,12 +12,12 @@
 				</div>
 				<div class="mt-4">
 					<div class="row" style="flex-wrap: nowrap;">
-						{% for image in images %}
+						{% for image in figure.images %}
 							<div class="col-md-4 mb-3">
 								<img src="{{ asset('uploads/images/' ~ image.imageName) }}" alt="{{ image.imageName }}" class="img-fluid img-thumbnail">
 							</div>
 						{% endfor %}
-						{% for video in videos %}
+						{% for video in figure.videos %}
 							<div class="col-md-4 mb-3">
 								<div class="embed-responsive embed-responsive-16by9">
 									<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.videoId }}" allowfullscreen></iframe>
@@ -32,15 +32,17 @@
 				</div>
 
 				<div class="mt-4">
-					<div class="form-group">
-						<label for="category">Catégorie:</label>
-						<select id="category" name="category" class="form-control">
-							{% for category in categories %}
-								<option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>{{ category.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
+        <div class="form-group">
+            <label for="category">Catégorie:</label>
+            <select id="category" name="category" class="form-control">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
 
 				<div class="mt-4">
 
@@ -58,33 +60,37 @@
 
 				</div>
 				<div class="mt-4">
-					<h3>Commentaires</h3>
-					{% if figure.comments|length > 0 %}
-						<ul class="list-unstyled">
-							{% for comment in figure.comments %}
-								<li class="media">
-									<img src="{{ comment.user.avatar.imageURL }}" class="mr-3" alt="Avatar" style="width: 100px; height: 100px;">
-									<div class="media-body">
-										<h5 class="mt-0">{{ comment.user.fullName }}</h5>
-										<p>{{ comment.content }}</p>
-									</div>
-								</li>
-							{% endfor %}
-						</ul>
-					{% else %}
-						<p>Aucun commentaire pour le moment.</p>
-					{% endif %}
-					{% if app.user %}
-						<h5>Ajouter un commentaire</h5>
-						{{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
+					<hr>
+            <h6>Commentaires :</h6>
+            <ul class="list-unstyled">
+                {% if comments is not empty %}
+                    {% for comment in figure.comments %}
+                        <li class="media">
+						{% if comment.user.avatar %}
+                            <img src="{{ comment.user.avatar.imageURL }}" class="mr-3" alt="Avatar" style="width: 100px; height: 100px;">
+							 {% endif %}
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ comment.user.fullName }}</h6>
+                                <p>{{ comment.content }}</p>
+                                <small class="text-muted">{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>Aucun commentaire pour le moment.</p>
+                {% endif %}
+            </ul>
 
-						{{ form_widget(form) }}
-						<button type="submit" class="btn btn-primary">Envoyer</button>
-						{{ form_end(form) }}
-					{% else %}
-						<p>Vous devez être connecté pour ajouter un commentaire.</p>
-					{% endif %}
-				</div>
+            {% if app.user %}
+                <h5>Ajouter un commentaire</h5>
+                {{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
+                {{ form_widget(form) }}
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+                {{ form_end(form) }}
+            {% else %}
+                <p>Vous devez être connecté pour ajouter un commentaire.</p>
+            {% endif %}
+        </div>
 			</div>
 
 		{% endblock %}

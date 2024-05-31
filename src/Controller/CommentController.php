@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Form\CommentType;
-use App\Entity\Figure;
 use App\Repository\CommentRepository;
+use Symfony\Component\Form\FormFactoryInterface;
 use App\Repository\FigureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,13 +15,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CommentController extends AbstractController
 {
-    private $commentRepository;
+    
     private $figureRepository;
   
 
-    public function __construct(CommentRepository $commentRepository, FigureRepository $figureRepository)
+    public function __construct( FigureRepository $figureRepository)
     {
-        $this->commentRepository = $commentRepository;
+       
         $this->figureRepository = $figureRepository;
        
     }
@@ -33,19 +33,31 @@ class CommentController extends AbstractController
             'figures' => $figures,
         ]);
     }
-    #[Route('/comment/new/{figure_slug}', name: 'comment_new')]
+    #[Route('/comment/new/{figure_slug}', name: 'comment_new', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, $figure_slug, FigureRepository $figureRepository): Response
+    public function new(Request $request, $figure_slug, FigureRepository $figureRepository, CommentRepository $commentRepository, FormFactoryInterface $formFactory): Response
     {
         $figure = $figureRepository->findOneBySlug($figure_slug);
-        dd($request);
-        $comment = $request->request->get('comment');
-      
-        if ($request->isMethod('POST')) {
-           
-            $this->commentRepository->save($comment, true);
-
-            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
+        if (!$figure) {
+            throw $this->createNotFoundException('Figure non trouvée');
         }
+
+        if($request->getMethod() === 'POST' && $request->request->has('comment'))
+        {
+            $data = $request->request->get('comment[content]');
+            $comment = new Comment($data);
+            $comment->setFigure($figure);
+            $comment->setUser($this->getUser());
+            $form = $formFactory->create(CommentType::class, $comment);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $commentRepository->save($comment, true);
+                $this->addFlash('success', 'Votre commentaire a bien été ajouté.');
+                return $this->redirectToRoute('app_figure_show', ['slug' => $figure->getSlug()]);
             }
+        }
+
+        $this->addFlash('danger', 'Votre commentaire n\'a pas pu être ajouté.');
+        return $this->redirectToRoute('app_figure_show', ['slug' => $figure->getSlug()]);
+    }
 }

@@ -52,8 +52,7 @@ class RegistrationType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Email(),
+                   
                     new IsTrue([
                         'message' => 'Vous devez approuver les conditions.',
                     ]),
