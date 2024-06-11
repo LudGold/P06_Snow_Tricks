@@ -1,0 +1,4 @@
+{{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
+{{ form_row(form.content) }}
+<button class="btn btn-primary">Submit</button>
+{{ form_end(form) }}

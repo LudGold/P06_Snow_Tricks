@@ -28,13 +28,13 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
-        $avatar = new Avatar();
-        $avatar->setName('avatar');
-        $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-        $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-        $user->setAvatar($avatar);
-        if ($form->isSubmitted() && $form->isValid()) {
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $avatar = new Avatar();
+            $avatar->setName('avatar');
+            $avatar->setImageUrl('defaultavatar.jpg');
+            $avatar->setPath('defaultavatar.jpg');
+            $user->setAvatar($avatar);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
     #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
 
     public function confirmEmail(
-        Request $request,
+
         string $emailConfirmationToken,
         EntityManagerInterface $entityManager
     ): Response {

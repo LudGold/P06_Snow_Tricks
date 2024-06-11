@@ -59,4 +59,13 @@ class CommentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findPaginatedComments(int $page, int $limit): array
+    {
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

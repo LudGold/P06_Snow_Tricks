@@ -1,7 +1,0 @@
-{{ form_start(form) }}
-    {{ form_row(form.content) }}
-    {{ form_widget(form.fullName) }} {# Champ caché, pas besoin de le rendre visible #}
-    {{ form_widget(form.avatarURL) }} {# Champ caché, pas besoin de le rendre visible #}
-    {{ form_widget(form.createdAt) }} {# Champ caché, pas besoin de le rendre visible #}
-    <button class="btn btn-primary">Submit</button>
-{{ form_end(form) }}

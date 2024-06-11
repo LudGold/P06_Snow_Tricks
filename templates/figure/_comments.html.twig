@@ -1,0 +1,15 @@
+{# templates/figure/_comments.html.twig #}
+{% for comment in comments %}
+    <li class="media">
+        {% if comment.user.avatar %}
+            <img src="{{ asset('/uploads/avatars/' ~ comment.user.avatar.imageURL) }}" class="mr-3" alt="Avatar" style="width:100px;height:100px;">
+        {% endif %}
+        <div class="media-body">
+            <h6 class="mt-0 mb-1">{{ comment.user.fullName }}</h6>
+            <p>{{ comment.content }}</p>
+            <small class="text-muted">{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+        </div>
+    </li>
+{% endfor %}
+
+

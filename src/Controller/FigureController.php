@@ -24,12 +24,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FigureController extends AbstractController
 {
     private $slugger;
-   
+
 
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
-        
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -102,10 +101,11 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'show', methods: ['GET'])]
-    public function show(?Figure $figure, CommentRepository $commentRepository,CategoryRepository $categoryRepository ): Response
+    #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
+    public function show(?Figure $figure, CommentRepository $commentRepository, CategoryRepository $categoryRepository): Response
     {
-        $comments = $commentRepository->findBy(['figure' => $figure]);
+        $limit = 3;
+        $comments = $commentRepository->findBy(['figure' => $figure], ['id' => 'ASC'], $limit);
         $categories = $categoryRepository->findAll();
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -115,9 +115,10 @@ class FigureController extends AbstractController
         }
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
-            'comments' => $comments,
             'categories' => $categories,
-            'form' => $form ->createView(),
+            'form' => $form->createView(),
+            'comments' => $comments,
+            'limit' => $limit,
         ]);
     }
 
@@ -132,19 +133,28 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('app_figure_index');
     }
 
-    #[Route('/more-figures', name: 'more_figures', methods: ['GET'])]
-    public function moreFigures(Request $request, FigureRepository $figureRepository): Response
-    {
-        $page = $request->query->getInt('page', 1);
-        $limit = 6; // Nombre de figures à charger par page
-        $figures = $figureRepository->findBy([], null, $limit, ($page - 1) * $limit);
+    #[Route('/load-more-comments', name: 'load_more_comments', methods: ['GET'])]
+public function loadMoreComments(Request $request, CommentRepository $commentRepository, FigureRepository $figureRepository): Response
+{
+    $figureSlug = $request->query->get('figureSlug');
+    $offset = $request->query->getInt('offset', 0);
+    $limit = 3;
 
-        if (!$figures) {
-            return new Response('', 204); // No Content
-        }
+    $figure = $figureRepository->findOneBy(['slug' => $figureSlug]);
 
-        return $this->render('figure/_figures.html.twig', [
-            'figures' => $figures,
-        ]);
+    if (!$figure) {
+        return new Response('Figure non trouvée', 404);
     }
+
+    $comments = $commentRepository->findBy(['figure' => $figure], ['id' => 'ASC'], $limit, $offset);
+
+    if (!$comments) {
+        return new Response('', 204); // No Content
+    }
+
+    return $this->render('figure/_comments.html.twig', [
+        'comments' => $comments,
+    ]);
 }
+}
+

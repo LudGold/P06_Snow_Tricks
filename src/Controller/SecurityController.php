@@ -37,7 +37,7 @@ class SecurityController extends AbstractController
     {
         if ($this->getUser()) {
             $this->addFlash('success', 'Vous êtes déjà connecté');
-            return $this->redirectToRoute('app_main_homepage');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('security/login.html.twig', [

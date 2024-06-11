@@ -12,18 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Psr\Log\LoggerInterface;
 
 class CommentController extends AbstractController
 {
-    
-    private $figureRepository;
-  
 
-    public function __construct( FigureRepository $figureRepository)
+    private $figureRepository;
+
+
+    public function __construct(FigureRepository $figureRepository)
     {
-       
+
         $this->figureRepository = $figureRepository;
-       
     }
     #[Route('/comment', name: 'app_comment')]
     public function index(): Response
@@ -42,8 +42,7 @@ class CommentController extends AbstractController
             throw $this->createNotFoundException('Figure non trouvée');
         }
 
-        if($request->getMethod() === 'POST' && $request->request->has('comment'))
-        {
+        if ($request->getMethod() === 'POST' && $request->request->has('comment')) {
             $data = $request->request->get('comment[content]');
             $comment = new Comment($data);
             $comment->setFigure($figure);
@@ -60,4 +59,6 @@ class CommentController extends AbstractController
         $this->addFlash('danger', 'Votre commentaire n\'a pas pu être ajouté.');
         return $this->redirectToRoute('app_figure_show', ['slug' => $figure->getSlug()]);
     }
+  
+
 }
