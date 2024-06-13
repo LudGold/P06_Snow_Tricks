@@ -10,3 +10,8 @@
         {{ form_end(form) }}
     </form>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/new.js')}}"></script>
+{% endblock %}

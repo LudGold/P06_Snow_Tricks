@@ -13,3 +13,8 @@
         {{ include('figure/_delete.html.twig') }}
     </section>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/new.js') }}"></script>
+{% endblock %}

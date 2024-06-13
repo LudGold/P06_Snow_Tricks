@@ -1,84 +1,156 @@
 {# templates/figure/show.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de la Figure{% endblock %}
-
-{% block body %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="text-center">
-                    <h1>{{ figure.name }}</h1>
-                </div>
-                <div class="mt-4">
-                    <div class="row" style="flex-wrap: nowrap;">
-                        {% for image in figure.images %}
-                            <div class="col-md-4 mb-3">
-                                <img src="{{ asset('uploads/images/' ~ image.imageName) }}" alt="{{ image.imageName }}" class="img-fluid img-thumbnail">
-                            </div>
-                        {% endfor %}
-                        {% for video in figure.videos %}
-                            <div class="col-md-4 mb-3">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.videoId }}" allowfullscreen></iframe>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <p>{{ figure.description }}</p>
-                </div>
-
-                <div class="mt-4">
-                    <div class="form-group">
-                        <label for="category">Catégorie:</label>
-                        <select id="category" name="category" class="form-control">
-                            {% for category in categories %}
-                                <option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>
-                                    {{ category.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2">
-                        <i class="bi bi-pencil"></i>
-                        Modifier
-                    </a>
-                    <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette figure?');" style="display: inline-block;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-                        <button class="btn btn-danger" type="submit">
-                            <i class="fas fa-trash-alt"></i>
-                            Supprimer
-                        </button>
-                    </form>
-                </div>
-                
-                <div class="mt-4">
-                    <hr>
-                    <h6>Commentaires:</h6>
-                    <ul class="list-unstyled" id="comments-container">
-                        {% include 'figure/_comments.html.twig' with {'comments': figure.comments|slice(0, 3)} %}
-                    </ul>
-                                       
-                    <button id="load-more-comments" class="btn btn-primary" data-figure-slug="{{ figure.slug }}">Charger plus</button>
-                    <button id="load-less-comments" class="btn btn-secondary" style="display:none;">Charger moins</button>
-                    {% if app.user %}
-                        <h5>Ajouter un commentaire</h5>
-                        {{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
-                        {{ form_widget(form) }}
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                        {{ form_end(form) }}
-                    {% else %}
-                        <p>Vous devez être connecté pour ajouter un commentaire.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+{% block title %}Détails de la Figure
 {% endblock %}
 
+{% block body %}
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="cover-image" style="background-image: url('{{ asset('uploads/images/' ~ figure.images[0].imageName) }}');">
+					<h1 class="cover-image-title">{{ figure.name }}</h1>
+					{% if app.user == figure.author %}
+						<div class="cover-image-buttons">
+							<a href="{{ path('app_figure_edit_cover', {'id': figure.id}) }}" class="btn btn-primary btn-edit">
+								<i class="bi bi-pencil"></i>
+
+							</a>
+							<form method="post" action="{{ path('app_figure_delete_image', {'id': figure.images[0].id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image de couverture ?');" style="display: inline-block;">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete_cover' ~ figure.images[0].id) }}">
+								<button class="btn btn-danger btn-delete" type="submit">
+									<i class="fas fa-trash-alt"></i>
+
+								</button>
+							</form>
+						</div>
+					{% endif %}
+				</div>
+
+				{# Bloc des images et vidéos #}
+				<div class="mt-4">
+					<div class="row">
+						{% for image in figure.images %}
+							<div class="col-md-4 mb-3">
+								<div class="thumbnail-container">
+									<img src="{{ asset('uploads/images/' ~ image.imageName) }}" alt="{{ image.imageName }}" class="img-fluid img-thumbnail">
+									{% if app.user == figure.author %}
+										<div class="thumbnail-buttons">
+											<a href="{{ path('app_figure_edit_image', {'id': image.id}) }}" class="btn btn-primary btn-edit">
+												<i class="bi bi-pencil"></i>
+
+											</a>
+											<form method="post" action="{{ path('app_figure_delete_image', {'id': image.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');" style="display: inline-block;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete_image' ~ image.id) }}">
+												<button class="btn btn-danger btn-delete" type="submit">
+													<i class="fas fa-trash-alt"></i>
+
+												</button>
+											</form>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						{% endfor %}
+
+						{% for video in figure.videos %}
+							<div class="col-md-4 mb-3">
+								<div class="thumbnail-container">
+									<div class="embed-responsive embed-responsive-16by9">
+										<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.videoId }}" allowfullscreen></iframe>
+									</div>
+									{% if app.user == figure.author %}
+										<div class="thumbnail-buttons">
+											<a href="{{ path('app_figure_edit_video', {'id': video.id}) }}" class="btn btn-primary btn-edit">
+												<i class="bi bi-pencil"></i>
+
+											</a>
+											<form method="post" action="{{ path('app_figure_delete_video', {'id': video.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?');" style="display: inline-block;">
+												<input type="hidden" name="_token" value="{{ csrf_token('delete_video' ~ video.id) }}">
+												<button class="btn btn-danger btn-delete" type="submit">
+													<i class="fas fa-trash-alt"></i>
+
+												</button>
+											</form>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div
+					class="container-show">
+					{# Nom de la figure #}
+					<div class="mt-4">
+						<h3>{{ figure.name }}</h3>
+					</div>
+
+					{# Description de la figure #}
+					<div class="mt-4">
+						<p>{{ figure.description }}</p>
+					</div>
+
+					{# Menu déroulant des catégories #}
+					<div class="mt-4">
+						<div class="form-group">
+							<label for="category">Catégorie:</label>
+							<select id="category" name="category" class="custom-select">
+								{% for category in categories %}
+									<option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>
+										{{ category.name }}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
+					{# Boutons Modifier et Supprimer pour l'ensemble de la figure si l'utilisateur est l'auteur #}
+					{% if app.user == figure.author %}
+						<div class="mt-4">
+							<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2 btn-edit">
+								<i class="bi bi-pencil"></i>
+
+							</a>
+							<form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette figure?');" style="display: inline-block;">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
+								<button class="btn btn-danger btn-delete" type="submit">
+									<i class="fas fa-trash-alt"></i>
+									Supprimer
+								</button>
+							</form>
+						</div>
+					{% endif %}
+
+					<div class="mt-4">
+						<hr>
+
+						{% if app.user %}
+
+							{{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
+							{{ form_widget(form) }}
+							<button type="submit" class="btn btn-primary btn-validate">Valider</button>
+							{{ form_end(form) }}
+						{% else %}
+							<p>Vous devez être connecté pour ajouter un commentaire.</p>
+						{% endif %}
+						<hr>
+						{# Liste des commentaires #}
+						<ul class="list-unstyled" id="comments-container">
+							{% include 'figure/_comments.html.twig' with {'comments': figure.comments|slice(0, 3)} %}
+						</ul>
+
+						{# Boutons de chargement des commentaires #}
+						<button id="load-more-comments" class="btn btn-primary btn-validate" data-figure-slug="{{ figure.slug }}">+</button>
+						<button id="load-less-comments" class="btn btn-secondary btn-less btn-validate" style="display:none;">-</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/comments.js') }}"></script>
+{% endblock %}
