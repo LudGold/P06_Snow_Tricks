@@ -97,9 +97,10 @@ body {
     display: none;
 }
 
-button#load-less-btn {
-    margin-left: 100%;
-    background-color: transparent !important;
+button#scroll-up {
+    font-size: 40px;
+    border-color: transparent;
+    background-color: transparent;
 }
 
 .custom-select {

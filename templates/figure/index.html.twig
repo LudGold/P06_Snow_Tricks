@@ -1,25 +1,25 @@
 {# templates/figure/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Figures{% endblock %}
+{% block title %}Figures
+{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Figures</h1>
-        <div class="row" id="figures-container">
-            {% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 15)} %}
-        </div>
-        
-        {% if figures|length > 15 %}
-            <div class="d-flex justify-content-center mt-4">
-                <button id="load-more-btn" class="btn btn-primary mt-4">Voir plus de figures</button>
-                <button id="load-less-btn" class="btn btn-secondary mt-4" style="display: none;">Voir moins de figures</button>
-            </div>
-        {% endif %}
-    </div>
+	<div class="container">
+		<h1>Figures</h1>
+		<div class="row" id="figures-container">
+			{% include 'figure/_figures.html.twig' with {'figures': figures|slice(0, 15)} %}
+		</div>
+
+		{% if figures|length > 15 %}
+			<div class="d-flex justify-content-right mt-4">
+				<button id="load-more-btn" class="btn btn-primary mt-4">Voir plus de figures</button>
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('figures.js') }}"></script>
+	{{ parent() }}
+	<script src="{{ asset('js/scroll.js') }}"></script>
+	<script src="{{ asset('js/figures.js') }}"></script>
 {% endblock %}
-

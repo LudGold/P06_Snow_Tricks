@@ -21,12 +21,15 @@ class FigureType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'required' => true,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('description', TextareaType::class, [
+                'required' => true,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('category', EntityType::class, [
+                'required' => true,
                 'class' => Category::class,
                 'choice_label' => 'name',
             ])
