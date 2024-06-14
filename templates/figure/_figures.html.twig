@@ -13,7 +13,8 @@
                 <div class="card-body d-flex flex-column flex-grow-1">
                     <div class="d-flex justify-content-around align-items-center mb-3">
                         <h5 class="card-title mb-0 flex-fill text-center">{{ figure.name }}</h5>
-                        {% if app.user == figure.author %}
+                        {% if app.user and figure.author and app.user == figure.author %}
+
                             <div class="d-flex flex-fill justify-content-center">
                                 <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2 btn-edit">
                                     <i class="bi bi-pencil text-dark"></i>
@@ -24,7 +25,8 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if app.user == figure.author %}
+                   {% if app.user and figure.author and app.user == figure.author %}
+
                         <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cette figure?');" id="delete-form-{{ figure.id }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
                         </form>

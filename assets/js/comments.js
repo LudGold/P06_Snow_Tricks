@@ -1,36 +1,40 @@
-// Gestion des commentaires avec "Load More" et "Load Less"
-const loadMoreCommentsButton = document.getElementById('load-more-comments');
-const loadLessCommentsButton = document.getElementById('load-less-comments');
-const commentsContainer = document.getElementById('comments-container');
-const initialCommentsHTML = commentsContainer.innerHTML;
+// public/js/comments.js
 
-let commentsOffset = 3;
+document.addEventListener('DOMContentLoaded', function() {
+    const loadMoreCommentsButton = document.getElementById('load-more-comments');
+    const loadLessCommentsButton = document.getElementById('load-less-comments');
+    const commentsContainer = document.getElementById('comments-container');
+    let offset = 3;
+    let initialComments = commentsContainer.innerHTML;
 
-if (loadMoreCommentsButton) {
-    loadMoreCommentsButton.addEventListener('click', function () {
-        const figureSlug = this.getAttribute('data-figure-slug');
-        fetch(`/load-more-comments?figureSlug=${figureSlug}&offset=${commentsOffset}`)
+    loadMoreCommentsButton.addEventListener('click', function() {
+        const figureSlug = this.dataset.figureSlug;
+
+        fetch(`/figure/load-more-comments?figureSlug=${figureSlug}&offset=${offset}`)
+           
             .then(response => response.text())
             .then(html => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                while (tempDiv.firstChild) {
-                    commentsContainer.appendChild(tempDiv.firstChild);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newComments = doc.querySelectorAll('#comments-container li');
+               
+                for (let i = 0; i < newComments.length; i++) {
+                    commentsContainer.appendChild(newComments[i]);
                 }
-                commentsOffset += 3;
-                if (html.trim() === '') {
+                newComments.forEach(comment => commentsContainer.appendChild(comment));
+                offset += newComments.length;
+               
+                if (newComments.length < 3) {
                     loadMoreCommentsButton.style.display = 'none';
+                    loadLessCommentsButton.style.display = 'inline-block';
                 }
-                loadLessCommentsButton.style.display = 'block';
             });
     });
-}
 
-if (loadLessCommentsButton) {
-    loadLessCommentsButton.addEventListener('click', function () {
-        commentsContainer.innerHTML = initialCommentsHTML;
-        commentsOffset = 3;
-        loadMoreCommentsButton.style.display = 'block';
+    loadLessCommentsButton.addEventListener('click', function() {
+        commentsContainer.innerHTML = initialComments;
+        offset = 3;
+        loadMoreCommentsButton.style.display = 'inline-block';
         loadLessCommentsButton.style.display = 'none';
     });
-}
+});
