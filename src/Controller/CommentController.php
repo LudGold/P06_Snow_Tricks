@@ -12,18 +12,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Psr\Log\LoggerInterface;
+
 
 class CommentController extends AbstractController
 {
 
     private $figureRepository;
+    private $commentRepository;
 
 
-    public function __construct(FigureRepository $figureRepository)
+    public function __construct(FigureRepository $figureRepository, CommentRepository $commentRepository)
     {
 
         $this->figureRepository = $figureRepository;
+        $this->commentRepository = $commentRepository;
     }
     #[Route('/comment', name: 'app_comment')]
     public function index(): Response
@@ -59,6 +61,4 @@ class CommentController extends AbstractController
         $this->addFlash('danger', 'Votre commentaire n\'a pas pu être ajouté.');
         return $this->redirectToRoute('app_figure_show', ['slug' => $figure->getSlug()]);
     }
-  
-
 }

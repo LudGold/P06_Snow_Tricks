@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Figure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -59,13 +60,49 @@ class CommentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function findPaginatedComments(int $page, int $limit): array
+ /**
+     * Récupère les commentaires avec pagination pour une figure donnée.
+     *
+     * @param int $figureId L'ID de la figure.
+     * @param int $limit Le nombre de commentaires à récupérer.
+     * @param int $offset L'offset pour la pagination.
+     * @return Comment[] La liste des commentaires.
+     */
+
+   /**
+     * Récupère les commentaires paginés pour une figure donnée.
+     *
+     * @param Figure $figure La figure pour laquelle récupérer les commentaires.
+     * @param int $page Le numéro de la page actuelle.
+     * @param int $limit Le nombre de commentaires par page.
+     * @return array Un tableau contenant les commentaires paginés, la page actuelle et le nombre total de pages.
+     */
+    public function findPaginatedByFigure(Figure $figure, int $page, int $limit): array
     {
+        $offset = ($page - 1) * $limit;
+
+        // Récupérer les commentaires paginés
         $queryBuilder = $this->createQueryBuilder('c')
+            ->where('c.figure = :figure')
+            ->setParameter('figure', $figure)
             ->orderBy('c.createdAt', 'DESC')
-            ->setFirstResult(($page - 1) * $limit)
+            ->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        return $queryBuilder->getQuery()->getResult();
+        $comments = $queryBuilder->getQuery()->getResult();
+
+        // Compter le nombre total de commentaires pour cette figure
+        $totalComments = $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->where('c.figure = :figure')
+            ->setParameter('figure', $figure)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return [
+            'data' => $comments,
+            'page' => $page,
+            'totalPages' => ceil($totalComments / $limit)
+        ];
     }
 }

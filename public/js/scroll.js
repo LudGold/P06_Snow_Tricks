@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .getElementById("figures-container")
       .scrollIntoView({ behavior: "smooth" });
   });
-    console.log('hello world');
+  
   document.getElementById("scroll-up").addEventListener("click", function () {
     document.getElementById("banner").scrollIntoView({ behavior: "smooth" });
   });

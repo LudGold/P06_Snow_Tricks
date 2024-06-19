@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Figure;
-use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,26 +22,24 @@ class FigureRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Figure[] Returns an array of Figure objects
+     * Trouve une figure par son slug.
+     *
+     * @param string $slug Le slug de la figure.
+     * @return Figure|null La figure trouvée ou null si aucune figure ne correspond.
      */
-    public function findByExampleField($value): array
+    public function findOneBySlug(string $slug): ?Figure
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findOneBySomeField($value): ?Figure
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
+        $figure = $this->createQueryBuilder('f')
+            ->andWhere('f.slug = :slug')
+            ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult();
+
+        if (!$figure) {
+            error_log("Figure not found for slug: $slug");
+        }
+
+        return $figure;
     }
 
     public function save(Figure $entity, bool $flush = false)
@@ -53,6 +50,7 @@ class FigureRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
     public function remove(Figure $entity, bool $flush = false)
     {
         $this->getEntityManager()->remove($entity);
@@ -61,5 +59,4 @@ class FigureRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    
 }

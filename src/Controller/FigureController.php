@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\FigureRepository;
 use App\Entity\Figure;
 use App\Entity\Comment;
+use App\Repository\FigureRepository;
 use App\Repository\CommentRepository;
 use App\Repository\CategoryRepository;
 use App\Form\FigureType;
@@ -23,11 +23,14 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FigureController extends AbstractController
 {
     private $slugger;
+    private $commentRepository;
+    private $figureRepository;
 
-
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(SluggerInterface $slugger, CommentRepository $commentRepository, FigureRepository $figureRepository)
     {
         $this->slugger = $slugger;
+        $this->commentRepository = $commentRepository;
+        $this->figureRepository = $figureRepository;
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -90,8 +93,8 @@ class FigureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageUploader->uploadImages($figure);
             $videoUploader->uploadVideos($figure);
-            
-            
+
+
             $figureRepository->save($figure, true);
 
             return $this->redirectToRoute('app_figure_show', [
@@ -105,30 +108,73 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
-    public function show(?Figure $figure, CommentRepository $commentRepository, CategoryRepository $categoryRepository,FigureRepository $figureRepository, Request $request): Response
-    {
-        $limit = 3;
-        $offset = $request->query->getInt('offset', 0);
-        $comments = $commentRepository->findBy(['figure' => $figure], ['id' => 'ASC'], $limit, $offset);
+    // #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
+    // public function show(string $slug, CommentRepository $commentRepository, CategoryRepository $categoryRepository, Request $request): Response
+    // {
+    //     // Récupérer la figure par son slug de manière explicite
+    //     $figure = $this->figureRepository->findOneBySlug($slug);
+    //     if (!$figure) {
+    //         throw $this->createNotFoundException('La figure spécifiée est introuvable.');
+    //     }
 
+    //     $limit = 3;
+    //     $offset = 0;
+
+    //     // Récupérer les commentaires initiaux
+    //     $initialComments = $this->commentRepository->findByOffset(
+    //         $figure->getId(), // Utiliser l'ID de la figure
+    //         $limit,
+    //         $offset
+    //     );
+
+    //     $categories = $categoryRepository->findAll();
+
+    //     $comment = new Comment();
+    //     $form = $this->createForm(CommentType::class, $comment);
+
+    //     return $this->render('figure/show.html.twig', [
+    //         'figure' => $figure,
+    //         'categories' => $categories,
+    //         'form' => $form->createView(),
+    //         'initialComments' => $initialComments,
+    //         'limit' => $limit,
+    //     ]);
+    // }
+    #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
+    public function show(string $slug, Figure $figure, Request $request, CommentRepository $commentRepository, CategoryRepository $categoryRepository): Response
+    {
+        // Récupérer la figure par son slug
+        $figure = $this->figureRepository->findOneBySlug($slug);
+        if (!$figure) {
+            throw $this->createNotFoundException('La figure spécifiée est introuvable.');
+        }
+
+        // Pagination des commentaires
+        $page = $request->query->getInt('page', 1);
+        $limit = 10;
+
+        // Utiliser la méthode de pagination du CommentRepository
+        $commentsData = $this->commentRepository->findPaginatedByFigure($figure, $page, $limit);
+
+        // Récupérer les catégories
         $categories = $categoryRepository->findAll();
 
+        // Formulaire de commentaires
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
 
-        if (!$figure) {
-            $figureSlug = $request->query->get('figureSlug');
-            $figure = $figureRepository->findOneBy(['slug' => $figureSlug]);
-        }
+        // Rendre la vue avec les commentaires paginés
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
             'categories' => $categories,
             'form' => $form->createView(),
-            'comments' => $comments,
-            'limit' => $limit,
+            'comments' => $commentsData['data'],
+            'currentPage' => $commentsData['page'],
+            'totalPages' => $commentsData['totalPages']
         ]);
     }
+
+
 
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
@@ -141,22 +187,37 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('app_figure_index');
     }
 
-    #[Route('/load-more-comments', name: 'load-more-comments', methods: ['GET'])]
-    public function loadMoreComments(Request $request, CommentRepository $commentRepository, FigureRepository $figureRepository): Response
-    {
-        $figureSlug = $request->query->get('figureSlug');
+    // #[Route('/load-more-comments', name: 'load-more-comments', methods: ['GET'])]
+    // public function loadMoreComments(Request $request): Response
+    // {
+    //     $figureSlug = $request->query->get('figureSlug');
 
-        $offset = $request->query->getInt('offset', 0);
-        $limit = 3;
+    //     if (!$figureSlug) {
+    //         return new Response('Erreur: figureSlug est requis.', 400);
+    //     }
 
-        $figure = $figureRepository->findOneBy(['slug' => $figureSlug]);
-        $comments = $commentRepository->findBy(['figure' => $figure], ['id' => 'ASC'], $limit, $offset);
-       
-    
+    //     // Utiliser la méthode findOneBySlug pour récupérer la figure par son slug
+    //     $figure = $this->figureRepository->findOneBySlug($figureSlug);
+    //     if (!$figure) {
 
-        return $this->render('figure/_comments.html.twig', [
-            'comments' => $comments,
-        ]);
-    }
+    //         return new Response('Erreur: la figure spécifiée est introuvable.', 404);
+    //     }
 
+    //     $offset = $request->query->getInt('offset', 0);
+
+    //     try {
+    //         $comments = $this->commentRepository->findByOffset(
+    //             $figure->getId(),
+    //             3, // Limite de 3 commentaires
+    //             $offset
+    //         );
+    //     } catch (\Exception $e) {
+    //         $this->addFlash('error', 'Une erreur s\'est produite lors du chargement des commentaires.');
+    //         return new Response('Erreur interne du serveur.', 500);
+    //     }
+
+    //     return $this->render('_comments.html.twig', [
+    //         'comments' => $comments,
+    //     ]);
+    // }
 }

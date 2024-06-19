@@ -1,7 +1,7 @@
 {# templates/figure/_figures.html.twig #}
 <div class="row">
     {% for figure in figures %}
-        <div class="col-12 col-sm-6 col-xl-3 col-xx1 mb-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-5th mb-4">
             <div class="card h-100 d-flex flex-column">
                 <a href="{{ path('app_figure_show', {'slug': figure.slug}) }}">
                     {% if figure.images|length > 0 %}
@@ -14,7 +14,6 @@
                     <div class="d-flex justify-content-around align-items-center mb-3">
                         <h5 class="card-title mb-0 flex-fill text-center">{{ figure.name }}</h5>
                         {% if app.user and figure.author and app.user == figure.author %}
-
                             <div class="d-flex flex-fill justify-content-center">
                                 <a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2 btn-edit">
                                     <i class="bi bi-pencil text-dark"></i>
@@ -25,8 +24,7 @@
                             </div>
                         {% endif %}
                     </div>
-                   {% if app.user and figure.author and app.user == figure.author %}
-
+                    {% if app.user and figure.author and app.user == figure.author %}
                         <form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cette figure?');" id="delete-form-{{ figure.id }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
                         </form>
