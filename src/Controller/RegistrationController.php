@@ -35,6 +35,13 @@ class RegistrationController extends AbstractController
             $avatar->setImageUrl('defaultavatar.jpg');
             $avatar->setPath('defaultavatar.jpg');
             $user->setAvatar($avatar);
+
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+            if ($existingUser) {
+                $this->addFlash('error', 'Cet e-mail a déjà été enregistré.');
+                return $this->redirectToRoute('app_register');
+                
+            }
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
