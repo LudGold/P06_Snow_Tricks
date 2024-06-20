@@ -18,8 +18,10 @@ body {
         display: none;
         /* Masquer le menu mobile sur les écrans moyens et grands */
     }
+
     .navbar {
         display: flex;
+
     }
 }
 
@@ -54,11 +56,9 @@ body {
 
 .nav-link {
     color: #333;
-    /* Couleur des liens */
-    font-size: 16px;
-    /* Taille des liens */
+    font-size: 22px;
     font-weight: bold;
-    /* Mettre en gras */
+
 }
 
 .nav-link:hover {
@@ -69,18 +69,22 @@ body {
 .main-content {
     margin-bottom: 100px;
 }
-a.forgot-password{
-color: black;
-text-decoration: none;
-font-size: 14px;
-font-weight: bolder;
+
+a.forgot-password {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bolder;
 }
-.mt-3 a{
+
+.mt-3 a {
     color: black;
 }
-button.btn.btn-lg.btn-primary.btn-block{
+
+button.btn.btn-lg.btn-primary.btn-block {
     margin-bottom: 3rem;
 }
+
 @media (min-width: 1200px) {
     .col-xl-5th {
         width: 20%;
@@ -95,9 +99,11 @@ button.btn.btn-lg.btn-primary.btn-block{
     min-height: 300px;
 
 }
-.form-check{
+
+.form-check {
     margin-top: 1rem;
 }
+
 .card-body {
     display: flex;
     flex-direction: column;
@@ -206,10 +212,12 @@ button#scroll-up {
 }
 
 .custom-select {
-    
-    width: auto; /* Utiliser toute la largeur du conteneur */
-    padding: 10px 15px; /* Ajouter du padding interne pour un look plus espacé */
-    font-size: 1rem; 
+
+    width: auto;
+    /* Utiliser toute la largeur du conteneur */
+    padding: 10px 15px;
+    /* Ajouter du padding interne pour un look plus espacé */
+    font-size: 1rem;
     box-shadow: 0 0 0 0.2rem rgba(198, 160, 236, 0.25) !important;
 
 }
@@ -245,9 +253,11 @@ button#scroll-up {
 
 
 }
-label{
+
+label {
     font-weight: bold;
 }
+
 .cover-image-title {
     text-align: center;
     opacity: 0.8;
@@ -434,9 +444,11 @@ button#figure_submit {
         height: 30px;
         font-size: 14px;
     }
-    .cover-image-buttons{
+
+    .cover-image-buttons {
         left: 65%;
     }
+
     .comment-wrapper {
         flex-direction: column;
         /* Colonne pour les petits écrans */

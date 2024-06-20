@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FigureRepository::class)]
-#[UniqueEntity(fields: ['name'], message: 'ce nom de figure existe déjà! ')]
+#[UniqueEntity(fields: ['name'], message: 'ce nom de figure existe déjà! ', groups: ['create', 'edit'])]
 class Figure
 {
     #[ORM\Id]

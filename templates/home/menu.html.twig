@@ -9,12 +9,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('homepage') }}">Home</a>
             </li>
+            {% if app.user %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_figure_new') }}">Ajouter une figure</a>
             </li>
+             
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_edit_user') }}">Modifier son avatar</a>
             </li>
+              {% endif %}
                 {% if not app.user %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_register') }}">Inscription</a>

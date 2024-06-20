@@ -106,7 +106,7 @@ class SecurityController extends AbstractController
             $user->setResetToken(null);
             $user->setPassword($hashedPassword);
             $entityManager->flush();
-
+            $this->addFlash('success', 'votre mot de passe a bien été modifié');
             return $this->redirectToRoute('app_login');
         }
 

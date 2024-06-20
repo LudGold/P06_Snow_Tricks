@@ -91,8 +91,8 @@ class RegistrationController extends AbstractController
         $user->setRoles(['ROLE_USER']);
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
-
+        $this->addFlash('success', 'votre compte est bien validé, vous pouvez vous connecter dès à présent.');
         // Rediriger vers une page après la confirmation de l'email
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('app_login');
     }
 }

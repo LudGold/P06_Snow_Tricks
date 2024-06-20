@@ -44,6 +44,7 @@ class FigureController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, FigureRepository $figureRepository, ImageUploader $imageUploader, VideoUploader $videoUploader): Response
     {
         $figure = new Figure();
@@ -93,8 +94,8 @@ class FigureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $imageUploader->uploadImages($figure);
             $videoUploader->uploadVideos($figure);
-
-
+            $figure->setSlug($this->slugger->slug($figure->getName())->lower());
+            
             $figureRepository->save($figure, true);
 
             return $this->redirectToRoute('app_figure_show', [
@@ -120,7 +121,7 @@ class FigureController extends AbstractController
 
         // Pagination des commentaires
         $page = $request->query->getInt('page', 1);
-        $limit = 10;
+        $limit = 3;
 
         // Utiliser la méthode de pagination du CommentRepository
         $commentsData = $this->commentRepository->findPaginatedByFigure($figure, $page, $limit);
