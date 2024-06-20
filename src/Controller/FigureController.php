@@ -108,40 +108,9 @@ class FigureController extends AbstractController
         ]);
     }
 
-    // #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
-    // public function show(string $slug, CommentRepository $commentRepository, CategoryRepository $categoryRepository, Request $request): Response
-    // {
-    //     // Récupérer la figure par son slug de manière explicite
-    //     $figure = $this->figureRepository->findOneBySlug($slug);
-    //     if (!$figure) {
-    //         throw $this->createNotFoundException('La figure spécifiée est introuvable.');
-    //     }
-
-    //     $limit = 3;
-    //     $offset = 0;
-
-    //     // Récupérer les commentaires initiaux
-    //     $initialComments = $this->commentRepository->findByOffset(
-    //         $figure->getId(), // Utiliser l'ID de la figure
-    //         $limit,
-    //         $offset
-    //     );
-
-    //     $categories = $categoryRepository->findAll();
-
-    //     $comment = new Comment();
-    //     $form = $this->createForm(CommentType::class, $comment);
-
-    //     return $this->render('figure/show.html.twig', [
-    //         'figure' => $figure,
-    //         'categories' => $categories,
-    //         'form' => $form->createView(),
-    //         'initialComments' => $initialComments,
-    //         'limit' => $limit,
-    //     ]);
-    // }
+    
     #[Route('/{slug}', name: 'show', methods: ['GET', 'POST'])]
-    public function show(string $slug, Figure $figure, Request $request, CommentRepository $commentRepository, CategoryRepository $categoryRepository): Response
+    public function show(string $slug, Figure $figure, Request $request,  CategoryRepository $categoryRepository): Response
     {
         // Récupérer la figure par son slug
         $figure = $this->figureRepository->findOneBySlug($slug);
@@ -186,38 +155,5 @@ class FigureController extends AbstractController
 
         return $this->redirectToRoute('app_figure_index');
     }
+    }
 
-    // #[Route('/load-more-comments', name: 'load-more-comments', methods: ['GET'])]
-    // public function loadMoreComments(Request $request): Response
-    // {
-    //     $figureSlug = $request->query->get('figureSlug');
-
-    //     if (!$figureSlug) {
-    //         return new Response('Erreur: figureSlug est requis.', 400);
-    //     }
-
-    //     // Utiliser la méthode findOneBySlug pour récupérer la figure par son slug
-    //     $figure = $this->figureRepository->findOneBySlug($figureSlug);
-    //     if (!$figure) {
-
-    //         return new Response('Erreur: la figure spécifiée est introuvable.', 404);
-    //     }
-
-    //     $offset = $request->query->getInt('offset', 0);
-
-    //     try {
-    //         $comments = $this->commentRepository->findByOffset(
-    //             $figure->getId(),
-    //             3, // Limite de 3 commentaires
-    //             $offset
-    //         );
-    //     } catch (\Exception $e) {
-    //         $this->addFlash('error', 'Une erreur s\'est produite lors du chargement des commentaires.');
-    //         return new Response('Erreur interne du serveur.', 500);
-    //     }
-
-    //     return $this->render('_comments.html.twig', [
-    //         'comments' => $comments,
-    //     ]);
-    // }
-}

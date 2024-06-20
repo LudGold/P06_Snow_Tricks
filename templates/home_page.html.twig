@@ -1,4 +1,4 @@
-{# templates/homepage.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil{% endblock %}
@@ -20,7 +20,7 @@
     </div>
 
     {% if figures|length > 15 %}
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-around mt-4 load-more">
             <button id="load-more-btn" class="btn btn-primary mt-4">Voir plus de figures</button>
 			
          <button id="scroll-up"  class="btn btn-secondary mt-4">
@@ -32,4 +32,6 @@
     {{ parent() }}
     <script src="{{ asset('js/scroll.js')}}"></script>
     <script src="{{ asset('js/figures.js')}}"></script>
+    
+
 {% endblock %}

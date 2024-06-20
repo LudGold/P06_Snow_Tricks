@@ -29,14 +29,14 @@ class ImageUploader
         try {
             $file->move($this->getTargetDirectory(), $newfileName);
         } catch (FileException $e) {
-            // ... handle exception if something happens during file upload
+          
         }
 
         return $newfileName;
     }
     public function uploadImages(Figure $figure): void
     {
-        // $entityManager = $this->entityManager;
+     
 
         foreach ($figure->getImages() as $image) {
             if ($image->getFile() !== null) {
@@ -49,7 +49,7 @@ class ImageUploader
                 $figure->removeImage($image);
             }
         }
-        // $entityManager->flush();
+       
     }
 
 

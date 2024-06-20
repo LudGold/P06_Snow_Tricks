@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Avatar;
+
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,13 +14,12 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                       
+
             ->add('avatar', fileType::class, [
                 'required' => false,
                 'mapped' => false,
                 'label' => 'Avatar (Image file)',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

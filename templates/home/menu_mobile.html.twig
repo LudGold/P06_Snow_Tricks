@@ -1,0 +1,25 @@
+
+<div class="footer-menu d-md-none">
+   <a href="{{ path('homepage') }}" class="footer-icon">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Home</span>
+    <a href="{{ path('app_figure_new') }}" class="footer-icon">
+        <i class="bi bi-activity"></i>
+        <span>add</span>
+    </a>
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}" class="footer-icon">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="footer-icon">
+            <i class="bi bi-person-circle"></i>
+            <span>Login</span>
+        </a>
+        <a href="{{ path('app_register') }}" class="footer-icon">
+            <i class="bi bi-person-plus"></i>
+            <span>Sign Up</span>
+        </a>
+    {% endif %}
+</div>
