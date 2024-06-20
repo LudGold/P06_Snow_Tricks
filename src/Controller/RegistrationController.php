@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Avatar;
 use App\Service\EmailConfirmationSender;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,14 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $avatar = new Avatar();
+            $avatar->setName('avatar');
+            $avatar->setImageUrl('defaultavatar.jpg');
+            $avatar->setPath('defaultavatar.jpg');
+            $user->setAvatar($avatar);
+
+
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
             if ($existingUser) {
                 $this->addFlash('error', 'Cet e-mail a déjà été enregistré.');
@@ -67,7 +76,7 @@ class RegistrationController extends AbstractController
     #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
 
     public function confirmEmail(
-        Request $request,
+
         string $emailConfirmationToken,
         EntityManagerInterface $entityManager
     ): Response {
@@ -86,8 +95,10 @@ class RegistrationController extends AbstractController
         $user->setRoles(['ROLE_USER']);
         // Enregistrer les modifications dans la base de données
         $entityManager->flush();
-
+        $this->addFlash('success', 'votre compte est bien validé, vous pouvez vous connecter dès à présent.');
         // Rediriger vers une page après la confirmation de l'email
-        return $this->redirectToRoute('homepage');
+
+        return $this->redirectToRoute('app_login');
+ 
     }
 }

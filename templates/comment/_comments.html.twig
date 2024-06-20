@@ -1,0 +1,16 @@
+{% for comment in comments %}
+    <div class="comment-wrapper">
+        <div class="avatar-container">
+            {% if comment.user.avatar %}
+                <img src="{{ asset('/uploads/avatars/' ~ comment.user.avatar.imageURL) }}" class="avatar-style" alt="Avatar">
+            {% endif %}
+            <h6 class="user-name">{{ comment.user.fullName }}</h6>
+        </div>
+        <div class="comment-block">
+            <div class="comment-content">
+                <small class="text-muted comment-date">{{ comment.createdAt|date('d/m/Y H:i') }}</small>
+                <p>{{ comment.content }}</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,5 +1,3 @@
-{# templates/figure/new.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter une nouvelle Figure{% endblock %}
@@ -7,8 +5,13 @@
 {% block body %}
     <h3>Ajouter une nouvelle Figure</h3>
     <form method="post" enctype="multipart/form-data">
-        {{ form_start(form) }}
+       
                 {{ include('figure/_form.html.twig') }}
-        {{ form_end(form) }}
+       
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/new.js')}}"></script>
 {% endblock %}

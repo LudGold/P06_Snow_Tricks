@@ -51,9 +51,8 @@ class UserFixtures extends Fixture
             ->setUserUuid(Uuid::v4());
         $avatar = new Avatar();
         $avatar->setName('avatar');
-        $avatar->setImageUrl('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-        $avatar->setPath('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
-        $avatar->setAvatar('https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg?size=626&ext=jpg');
+        $avatar->setImageUrl('/uploads/avatars/defaultavatar.jpg');
+        $avatar->setPath('/uploads/avatars/defaultavatar.jpg');
         $user->setAvatar($avatar);
 
         return $user;

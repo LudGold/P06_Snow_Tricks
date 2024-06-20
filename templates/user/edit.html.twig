@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Edit User</h1>
+
+    {{ form_start(userForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        <div>
+            <label for="current-avatar"></label>
+            {% if app.user.avatar %}
+                <img id="current-avatar" src="{{ asset ('uploads/avatars/' ~ app.user.avatar.imageUrl) }}" alt="Current Avatar" style="max-width: 200px;">
+            {% else %}
+                <p></p>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="avatar">nouvel image de profil:</label>
+            {{ form_widget(userForm.avatar) }}
+            <img id="avatar-preview" src="#" alt="Avatar Preview" style="display: none; max-width: 200px;"/>
+        </div>
+
+        <button class="btn btn-primary">enregistrer</button>
+    {{ form_end(userForm) }}
+
+    <script>
+        document.getElementById('user_avatar').addEventListener('change', function(event) {
+            const [file] = event.target.files;
+            if (file) {
+                const preview = document.getElementById('avatar-preview');
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+    </script>
+{% endblock %}

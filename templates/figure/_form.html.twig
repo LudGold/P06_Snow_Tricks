@@ -11,19 +11,18 @@
         {{ form_errors(form.images) }}
         {% for image in form.images %}
         {% if image %}
-                    <div class="input-media hidden-input">
+                    <div class="input-media hidden-input col-6 col-md-4 col-lg-3 mb-3">
                         <img src="{{ asset('uploads/images/') }}{{ image.vars.data.imageName }}" alt="{{ image.vars.data.imageName }}"class="img-thumbnail">
                         {{ include('figure/_image.html.twig', {form: image}) }}
                     </div>
                     {% else %}
-                        <div class="input-media">
+                        <div class="input-media col-6 col-md-4 col-lg-3 mb-3">
                             {{ include('figure/_image.html.twig', {form: image}) }}
                         </div>
                 {% endif %}
             {% endfor %}
         </div>
-    {# Affichage des erreurs globales du champ images #}
-    {{ form_errors(form.images) }}
+      {{ form_errors(form.images) }}
 
     {# Bouton pour ajouter une nouvelle image #}
     <button type="button" class="btn btn-primary btn-new mt-3" data-collection="#trick_images">Ajouter une image</button>

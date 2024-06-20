@@ -17,6 +17,7 @@ class MainController extends AbstractController
         $figures = $figureRepository->findAll();
         return $this->render('home_page.html.twig', [
             'figures' => $figures,
+            
         ]);
     }
 
@@ -24,7 +25,7 @@ class MainController extends AbstractController
     public function loadMoreFigures(Request $request, FigureRepository $figureRepository): JsonResponse
     {
         $offset = $request->query->getInt('offset', 0);
-        $limit = 6;
+        $limit = 15;
 
         $figures = $figureRepository->findBy([], [], $limit, $offset);
         $remaining = count($figureRepository->findAll()) - ($offset + $limit);

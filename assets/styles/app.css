@@ -1,27 +1,475 @@
 body {
-    background-color: skyblue;
+    background-color: #d0e7f9;
 }
-.position-relative{
+
+.container {
+    margin-bottom: 30px;
+}
+
+.position-relative {
     margin-bottom: 50px;
 }
+
+/*partie menu desktop et mobile*/
+
+/* Menu principal (bureau) */
+@media (min-width: 768px) {
+    .footer-menu {
+        display: none;
+        /* Masquer le menu mobile sur les écrans moyens et grands */
+    }
+
+    .navbar {
+        display: flex;
+
+    }
+}
+
+.collapse {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Ombre douce avec un peu de décalage vertical */
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(245, 245, 245, 0.9) 100%);
+    /* Dégradé léger pour un effet visuel agréable */
+    border-bottom: 1px solid #ddd;
+}
+
+/* Pour s'assurer que le menu de bureau est visible seulement sur les grands écrans */
+.navbar {
+    display: none;
+}
+
+
+.navbar-nav {
+    flex-direction: row;
+    /* Disposer les items du menu horizontalement */
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+    /* Espacement entre les items */
+}
+
+.navbar-brand {
+    margin-right: auto;
+    /* Pousser le logo à gauche */
+}
+
+.nav-link {
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+
+}
+
+.nav-link:hover {
+    color: #0056b3;
+    /* Couleur au survol */
+}
+
+.main-content {
+    margin-bottom: 100px;
+}
+
+a.forgot-password {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.mt-3 a {
+    color: black;
+}
+
+button.btn.btn-lg.btn-primary.btn-block {
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 1200px) {
+    .col-xl-5th {
+        width: 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+}
+
 .card {
     border: none;
     transition: transform 0.3s;
+    min-height: 300px;
+
+}
+
+.form-check {
+    margin-top: 1rem;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
 .card:hover {
     transform: scale(1.05);
 }
 
+.card-title {
+    flex: 1;
+    text-align: center;
+}
+
+.text-dark {
+    color: black !important;
+}
+
+.description-txt {
+    font-size: 20px;
+}
+
+.btn-new,
+.btn {
+    display: inline-flex;
+    background-color: #5b10c5;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-edit,
+.btn-delete {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+.btn-validate {
+    background: cadetblue;
+    border: none;
+}
+
 .card-img-top {
     height: 200px;
     object-fit: cover;
 }
-.title-card a{
+
+.title-card a {
     text-decoration: none;
     color: black;
 }
-.home-btn{
+
+.home-btn {
     width: 40px;
-  
+}
+
+.homepage-banner h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* styles/app.css ou un fichier CSS approprié */
+
+.homepage-banner {
+    position: relative;
+    background: url('/uploads/images/backflip.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    padding: 200px 0;
+}
+
+.scroll-down-arrow {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 2rem;
+    color: white;
+    opacity: 0.7;
+}
+
+.scroll-down-arrow:hover {
+    opacity: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+button#scroll-up {
+    font-size: 40px;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.custom-select {
+
+    width: auto;
+    /* Utiliser toute la largeur du conteneur */
+    padding: 10px 15px;
+    /* Ajouter du padding interne pour un look plus espacé */
+    font-size: 1rem;
+    box-shadow: 0 0 0 0.2rem rgba(198, 160, 236, 0.25) !important;
+
+}
+
+.custom-select:focus {
+    border-color: transparent !important;
+    box-shadow: 0 0 0 0.2rem rgba(23, 23, 23, 0.25) !important;
+}
+
+.cover-image {
+    background: url('/uploads/images/backflip_2.jpg') no-repeat center center;
+    background-size: cover;
+    height: 400px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    /* Coins arrondis pour un effet esthétique */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Ajouter une ombre pour la profondeur */
+    margin-bottom: 20px;
+}
+
+.cover-image-buttons {
+    position: absolute;
+    left: 80%;
+    opacity: 0.9;
+    gap: 10px !important;
+    padding: 5px;
+    /* Ajout de padding pour un peu d'espace interne */
+    border-radius: 5px;
+
+
+}
+
+label {
+    font-weight: bold;
+}
+
+.cover-image-title {
+    text-align: center;
+    opacity: 0.8;
+    font-size: 5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.container-show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Styles pour le bloc de commentaire */
+.comment-block {
+    flex-grow: 1;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 10px 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 70%;
+    /* Limite la largeur du bloc de commentaire */
+    text-align: left;
+    /* Texte aligné à gauche */
+    position: relative;
+    /* Pour positionner le contenu interne */
+}
+
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+    /* Espacement à droite de l'avatar */
+    position: relative;
+}
+
+.user-name {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.comment-content {
+    margin-top: 10px;
+    /* Space between top of comment box and the comment content */
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    /* Smaller font for the date */
+    color: gray;
+}
+
+.comment-content p {
+    font-size: 1rem;
+    /* Adjust font size as needed */
+    margin-top: 5px;
+    /* Space between the date and the comment content */
+}
+
+.comment-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    /* Espacement entre les commentaires */
+    width: 100%;
+    /* Utiliser toute la largeur disponible */
+    max-width: 800px;
+    /* Limiter la largeur maximale */
+}
+
+.avatar-style {
+    width: 60px;
+    /* Taille de l'avatar */
+    height: 60px;
+    /* Taille de l'avatar */
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    margin-bottom: 5px;
+    /* Espacement sous l'avatar */
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+button#figure_submit {
+    margin-top: 1rem;
+}
+
+.input-media.hidden-input {
+    margin-top: 5rem;
+}
+
+/* Styles de base pour le conteneur de vignettes */
+.thumbnail-container {
+    position: relative;
+
+    border: 1px solid #ddd;
+    /* Bordure légère pour visualiser les cartes */
+    border-radius: 5px;
+    /* Coins légèrement arrondis */
+    height: 200px;
+    /* Taille uniforme pour les vignettes */
+    width: 100%;
+    /* Assurer que les vignettes utilisent toute la largeur disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 15px;
+    /* Espacement entre les vignettes */
+}
+
+.thumbnail-container img,
+.thumbnail-container .embed-responsive {
+    width: 100%;
+    /* S'assurer que le contenu remplit toute la vignette */
+    height: 100%;
+    /* S'assurer que le contenu remplit toute la vignette */
+    object-fit: cover;
+    /* Assurer que l'image ou la vidéo couvre entièrement la vignette */
+}
+
+/* Ajuster la taille des iframes pour qu'ils s'adaptent aux vignettes */
+.thumbnail-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Conteneur pour les boutons d'édition et de suppression */
+
+
+@media (max-width: 768px) {
+    /* CSS pour le menu mobile */
+
+    .footer-menu {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #ffffff;
+        border-top: 1px solid #e7e7e7;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        /* Assurez-vous que le menu est au-dessus des autres contenus */
+    }
+
+    .footer-menu .footer-icon {
+        text-align: center;
+        flex: 1;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .footer-menu .footer-icon i {
+        display: block;
+        font-size: 24px;
+        margin-bottom: 4px;
+    }
+
+    .footer-menu .footer-icon span {
+        display: block;
+        font-size: 12px;
+    }
+
+
+    .video-controls .btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .cover-image-buttons {
+        left: 65%;
+    }
+
+    .comment-wrapper {
+        flex-direction: column;
+        /* Colonne pour les petits écrans */
+        align-items: center;
+    }
+
+    .avatar-container {
+        margin-right: 0;
+        margin-bottom: 10px;
+        /* Espacement en bas de l'avatar */
+    }
+
+    .comment-block {
+        max-width: 100%;
+        /* Utiliser toute la largeur disponible */
+    }
+
+    #scroll-up {
+
+        font-size: 1rem !important;
+        width: 40px !important;
+        height: 40px !important;
+    }
 }

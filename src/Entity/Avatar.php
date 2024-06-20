@@ -19,13 +19,11 @@ class Avatar
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $avatar = null;
-
     #[ORM\OneToOne(inversedBy: 'avatar', cascade: ['persist', 'remove'])]
-    private ?User $avatars = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageURL = null;
 
     public function getId(): ?int
@@ -57,26 +55,14 @@ class Avatar
         return $this;
     }
 
-    public function getAvatar(): ?string
+    public function getUser(): ?User
     {
-        return $this->avatar;
+        return $this->user;
     }
 
-    public function setAvatar(string $avatar): static
+    public function setUser(?User $user): static
     {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    public function getAvatars(): ?User
-    {
-        return $this->avatars;
-    }
-
-    public function setAvatars(?User $avatars): static
-    {
-        $this->avatars = $avatars;
+        $this->user = $user;
 
         return $this;
     }
@@ -86,7 +72,7 @@ class Avatar
         return $this->imageURL;
     }
 
-    public function setImageURL(string $imageURL): static
+    public function setImageURL(?string $imageURL): static
     {
         $this->imageURL = $imageURL;
 

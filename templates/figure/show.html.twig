@@ -6,61 +6,153 @@
 {% block body %}
 	<div class="container">
 		<div class="row justify-content-center">
-			<div class="col-md-8">
-				<div class="text-center">
-					<h1>{{ figure.name }}</h1>
+			
+				<div class="cover-image" style="background-image: url('{{ asset('uploads/images/' ~ figure.images[0].imageName) }}');">
+					<h1 class="cover-image-title">{{ figure.name }}</h1>
 				</div>
-<div class="mt-4">
-    <div class="row" style="flex-wrap: nowrap;">
-        {% for image in images %}
-            <div class="col-md-4 mb-3">
-                <img src="{{ asset('uploads/images/' ~ image.imageName) }}" alt="{{ image.imageName }}" class="img-fluid img-thumbnail">
-            </div>
-        {% endfor %}
-        {% for video in videos %}
-            <div class="col-md-4 mb-3">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.videoId }}" allowfullscreen></iframe>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
 
-
-
-
-					<div class="mt-4">
-						<p>{{ figure.description }}</p>
-					</div>
-
-					<div class="mt-4">
-						<div class="form-group">
-							<label for="category">Catégorie:</label>
-							<select id="category" name="category" class="form-control">
-								{% for category in categories %}
-									<option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>{{ category.name }}</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
-
-					<div class="mt-4">
-
-						<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2">
+				{% if app.user == figure.author %}
+					<div class="cover-image-buttons">
+						<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary btn-edit">
 							<i class="bi bi-pencil"></i>
-							Modifier
 						</a>
-						<form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette figure?');" style="display: inline-block;">
-							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
-							<button class="btn btn-danger" type="submit">
+						<form method="post" action="{{ path('app_figure_delete', {'id': figure.images[0].id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image de couverture ?');" style="display: inline-block;">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete_cover' ~ figure.images[0].id) }}">
+							<button class="btn btn-danger btn-delete" type="submit">
 								<i class="fas fa-trash-alt"></i>
-								Supprimer
 							</button>
 						</form>
+					</div>
+				{% endif %}
+			</div>
 
+			{# Bloc des images et vidéos #}
+			<div class="mt-4">
+				<div class="row">
+					{% for image in figure.images %}
+						<div class="col-6 col-md-4 col-lg-2 mb-3">
+							<div class="thumbnail-container">
+								<img src="{{ asset('uploads/images/' ~ image.imageName) }}" alt="{{ image.imageName }}" class="img-fluid img-thumbnail">
+								{% if app.user == figure.author %}
+									<div class="thumbnail-buttons">
+										<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary btn-edit">
+											<i class="bi bi-pencil"></i>
+										</a>
+										<form method="post" action="{{ path('app_figure_delete', {'id': image.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');" style="display: inline-block;">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete_image' ~ image.id) }}">
+											<button class="btn btn-danger btn-delete" type="submit">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										</form>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+
+					{% for video in figure.videos %}
+						<div class="col-6 col-md-4 col-lg-2 mb-3">
+							<div class="thumbnail-container">
+								<div class="embed-responsive embed-responsive-16by9">
+									<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.videoId }}" allowfullscreen></iframe>
+								</div>
+								
+								{% if app.user == figure.author %}
+									<div class="thumbnail-buttons">
+										<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary btn-edit">
+											<i class="bi bi-pencil"></i>
+										</a>
+										<form method="post" action="{{ path('app_figure_delete', {'id': video.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?');" style="display: inline-block;">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete_video' ~ video.id) }}">
+											<button class="btn btn-danger btn-delete" type="submit">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										</form>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="container-show">
+				
+					<div class="mt-4"> <h3>{{ figure.name }}</h3>
+				</div>
+
+				{# Description de la figure #}
+				<div class="mt-4 description-txt">
+					<p>{{ figure.description }}</p>
+				</div>
+
+				{# Menu déroulant des catégories #}
+				<div class="mt-4">
+					<div class="form-group">
+						<label for="category">Catégorie:</label>
+						<select id="category" name="category" class="custom-select">
+							{% for category in categories %}
+								<option value="{{ category.id }}" {% if category.id == figure.category.id %} selected="selected" {% endif %}>
+									{{ category.name }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				{% if app.user == figure.author %}
+					<div class="mt-4">
+						<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2 btn-edit">
+							<i class="bi bi-pencil"></i>
+						</a>
+						<form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir  cette figure?');" style="display: inline-block;">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
+							<button class="btn btn-danger btn-delete" type="submit">
+								<i class="fas fa-trash-alt"></i>
+								
+							</button>
+						</form>
+					</div>
+				{% endif %}
+
+				<div class="mt-4">
+					<hr>
+
+					{% if app.user %}
+						{{ form_start(form, {'action': path('comment_new', {'figure_slug': figure.slug})}) }}
+						{{ form_widget(form) }}
+						<button type="submit" class="btn btn-primary btn-validate">Valider</button>
+						{{ form_end(form) }}
+					{% else %}
+						<p>Vous devez être connecté pour ajouter un commentaire.</p>
+					{% endif %}
+					<hr>
+
+					{# Liste des commentaires #}
+					<div id="comments-container">
+                      {% if comments|length > 0 %}
+						{% for comment in comments %}
+							{% include 'comment/_comments.html.twig' with {'comments': [comment]} %}
+						{% endfor %}
+                         {% else %}
+                        <p>Pas de commentaires postés pour le moment.</p>
+                    {% endif %}
+					</div>
+
+					<!-- Liens de pagination -->
+					<div class="pagination">
+						{% if currentPage > 1 %}
+							<a href="{{ path('app_figure_show', { slug: figure.slug, page: currentPage - 1 }) }}">Page précédente</a>
+						{% endif %}
+
+						{% if currentPage < totalPages %}
+							<a href="{{ path('app_figure_show', { slug: figure.slug, page: currentPage + 1 }) }}">Page suivante</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
 		</div>
-	{% endblock %}
+	</div>
+    
+{% endblock %}
+

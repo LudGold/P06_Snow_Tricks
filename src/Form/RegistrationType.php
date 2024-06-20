@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class RegistrationType extends AbstractType
 {
@@ -50,6 +51,7 @@ class RegistrationType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
+                   
                     new IsTrue([
                         'message' => 'Vous devez approuver les conditions.',
                     ]),
@@ -78,6 +80,12 @@ class RegistrationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'constraints' => [
+                new UniqueEntity([
+                    'fields' => 'email',
+                    'message' => 'Cette adresse e-mail est déjà utilisée.',
+                ]),
+            ],
         ]);
     }
 }
