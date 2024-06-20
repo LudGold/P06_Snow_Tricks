@@ -15,6 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 
+
+
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
@@ -30,11 +32,13 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $avatar = new Avatar();
             $avatar->setName('avatar');
             $avatar->setImageUrl('defaultavatar.jpg');
             $avatar->setPath('defaultavatar.jpg');
             $user->setAvatar($avatar);
+
 
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
             if ($existingUser) {
@@ -93,6 +97,8 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
         $this->addFlash('success', 'votre compte est bien validé, vous pouvez vous connecter dès à présent.');
         // Rediriger vers une page après la confirmation de l'email
+
         return $this->redirectToRoute('app_login');
+ 
     }
 }
