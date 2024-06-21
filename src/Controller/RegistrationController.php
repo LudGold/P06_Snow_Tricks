@@ -15,8 +15,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-
-
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
@@ -38,18 +36,8 @@ class RegistrationController extends AbstractController
             $avatar->setImageUrl('defaultavatar.jpg');
             $avatar->setPath('defaultavatar.jpg');
             $user->setAvatar($avatar);
-<<<<<<< Updated upstream
 
-
-            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
-            if ($existingUser) {
-                $this->addFlash('error', 'Cet e-mail a déjà été enregistré.');
-                return $this->redirectToRoute('app_register');
-                
-            }
-=======
-    
->>>>>>> Stashed changes
+             
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -74,7 +62,6 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
-<<<<<<< Updated upstream
     }
 
     #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
@@ -106,6 +93,4 @@ class RegistrationController extends AbstractController
  
     }
 }
-=======
-    }}
->>>>>>> Stashed changes
+    

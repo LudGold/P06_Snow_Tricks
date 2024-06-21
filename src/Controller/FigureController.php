@@ -60,11 +60,7 @@ class FigureController extends AbstractController
 
                 $imageUploader->uploadImages($figure);
                 $videoUploader->uploadVideos($figure);
-                // Définir la première image téléchargée comme image de couverture
-                $images = $figure->getImages();
-                if (count($images) > 0) {
-                    $coverImage = $images[0];
-                }
+
                 $figureRepository->save($figure, true);
 
                 $this->addFlash('success', 'La figure a bien été créée');

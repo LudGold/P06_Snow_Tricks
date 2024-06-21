@@ -2,83 +2,103 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('firstName', TextType::class, [ // Ajoutez le champ nom utilisateur
-                'label' => 'Nom', // Étiquette du champ
-                'required' => true, // Rend le champ obligatoire
-                'constraints' => [ // Ajoutez éventuellement des contraintes de validation
-                    new NotBlank([
-                        'message' => 'Entrez votre nom',
-                    ]),
-                    new Length([
-                        'min' => 3,
-                        'minMessage' => 'Votre nom doit faire au minimum {{ limit }} characters',
-                        'max' => 255,
-                    ]),
-                ],
-            ])
-            ->add('lastName', TextType::class, [ // Ajoutez le champ prénom utilisateur
-                'label' => 'Prénom', // Étiquette du champ
-                'required' => true, // Rend le champ obligatoire
-                'constraints' => [ // Ajoutez éventuellement des contraintes de validation
-                    new NotBlank([
-                        'message' => 'Entrez votre prénom',
-                    ]),
-                    new Length([
-                        'min' => 3,
-                        'minMessage' => 'Votre prénom doit faire au minimum {{ limit }} characters',
-                        'max' => 255,
-                    ]),
-                ],
-            ])
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
+        $this->addUserDetailsFields($builder);
+        $this->addPasswordFields($builder);
+        $this->addSubmitButton($builder);
+    }
 
-                    new IsTrue([
-                        'message' => 'Vous devez approuver les conditions.',
+    private function addUserDetailsFields(FormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('firstName', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le prénom est requis',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Le prénom doit avoir au moins {{ limit }} caractères',
+                        'max' => 50,
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                'label' => 'Mot de passe',
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+            ->add('lastName', TextType::class, [
+                'label' => 'Prénom',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Entrez votre mot de passe',
+                        'message' => 'Le nom est requis',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'min' => 2,
+                        'minMessage' => 'Le nom doit avoir au moins {{ limit }} caractères',
+                        'max' => 50,
+                    ]),
+                ],
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse e-mail',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'L\'adresse e-mail est requise',
+                    ]),
+                    new Email([
+                        'message' => 'Veuillez entrer une adresse e-mail valide',
                     ]),
                 ],
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    private function addPasswordFields(FormBuilderInterface $builder): void
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $builder
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Le mot de passe est requis',
+                        ]),
+                        new Length([
+                            'min' => 8,
+                            'minMessage' => 'Le mot de passe doit avoir au moins {{ limit }} caractères',
+                            'max' => 4096,
+                        ]),
+                        new Regex([
+                            'pattern' => '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])/',
+                            'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial',
+                        ]),
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'Répétez le mot de passe',
+                ],
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
+            ]);
+    }
+
+    private function addSubmitButton(FormBuilderInterface $builder): void
+    {
+        $builder
+            ->add('submit', SubmitType::class, [
+                'label' => 'S\'inscrire',
+            ]);
     }
 }
