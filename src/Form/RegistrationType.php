@@ -51,15 +51,14 @@ class RegistrationType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
-                   
+
                     new IsTrue([
                         'message' => 'Vous devez approuver les conditions.',
                     ]),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'label' => 'Mot de passe',
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -80,12 +79,6 @@ class RegistrationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'constraints' => [
-                new UniqueEntity([
-                    'fields' => 'email',
-                    'message' => 'Cette adresse e-mail est déjà utilisée.',
-                ]),
-            ],
         ]);
     }
 }

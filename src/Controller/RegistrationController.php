@@ -30,7 +30,7 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
 
             $avatar = new Avatar();
@@ -38,6 +38,7 @@ class RegistrationController extends AbstractController
             $avatar->setImageUrl('defaultavatar.jpg');
             $avatar->setPath('defaultavatar.jpg');
             $user->setAvatar($avatar);
+<<<<<<< Updated upstream
 
 
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
@@ -46,31 +47,34 @@ class RegistrationController extends AbstractController
                 return $this->redirectToRoute('app_register');
                 
             }
+=======
+    
+>>>>>>> Stashed changes
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('plainPassword')->getData()  // Attention à bien utiliser le nom du champ 'plainPassword'
                 )
             );
+            
             // Générer le token de confirmation d'email
             $user->generateEmailConfirmationToken();
-            $this->addFlash('success', 'Un
-            email a été envoyé afin de valider votre inscription.');
             $entityManager->persist($user);
             $entityManager->flush();
-            // URL de confirmation
+    
             $confirmationUrl = $this->generateUrl('confirm_email', ['emailConfirmationToken' => $user->getEmailConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            // do anything else you need here, like send an email
+    
             $emailConfirmationSender->sendConfirmationEmail($user, $confirmationUrl);
-
+    
+            $this->addFlash('success', 'Un email a été envoyé afin de valider votre inscription.');
             return $this->redirectToRoute('homepage');
         }
-
+    
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+<<<<<<< Updated upstream
     }
 
     #[Route("confirm-email/{emailConfirmationToken}", name: 'confirm_email')]
@@ -102,3 +106,6 @@ class RegistrationController extends AbstractController
  
     }
 }
+=======
+    }}
+>>>>>>> Stashed changes

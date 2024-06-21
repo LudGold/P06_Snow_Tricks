@@ -84,7 +84,9 @@ a.forgot-password {
 button.btn.btn-lg.btn-primary.btn-block {
     margin-bottom: 3rem;
 }
-
+.btn{
+    margin-top: 1rem;
+}
 @media (min-width: 1200px) {
     .col-xl-5th {
         width: 20%;
