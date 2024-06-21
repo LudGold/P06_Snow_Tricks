@@ -1,5 +1,5 @@
 Description de l'image
-Welcome to MyBlog
+Welcome to Snow_Tricks!
 
 Project OCR P06 - create with symfony your website
 
