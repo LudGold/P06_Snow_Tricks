@@ -1,19 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Trick{% endblock %}
+{% block title %}Edit Trick
+{% endblock %}
 
 {% block body %}
-    <section class="container">
-        <h1>Modifier la figure</h1>
+	<section class="container">
+		<h1>Modifier la figure</h1>
 
-        {{ include('figure/_form.html.twig', {'button_label': 'Update'}) }}
-     
-        
-        <a href="{{ path('app_figure_index') }}">retour à l'accueil</a>
-    </section>
+		{{ include('figure/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+		<a href="{{ path('app_figure_index') }}">retour à l'accueil</a>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/new.js') }}"></script>
-    {% endblock %}
+	{{ parent() }}
+	<script src="{{ asset('js/new.js') }}"></script>
+{% endblock %}

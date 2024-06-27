@@ -148,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        //  $this->plainPassword = null;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -282,8 +282,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setAvatar(?Avatar $avatar): static
     {
-        // unset the owning side of the relation if necessary
-        if ($avatar === null && $this->avatar !== null) {
+            if ($avatar === null && $this->avatar !== null) {
             $this->avatar->setUser(null);
         }
 

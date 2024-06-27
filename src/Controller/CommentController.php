@@ -37,7 +37,7 @@ class CommentController extends AbstractController
     }
     #[Route('/comment/new/{figure_slug}', name: 'comment_new', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, $figure_slug, FigureRepository $figureRepository, CommentRepository $commentRepository, FormFactoryInterface $formFactory): Response
+    public function new(Request $request, string $figure_slug, FigureRepository $figureRepository, CommentRepository $commentRepository, FormFactoryInterface $formFactory): Response
     {
         $figure = $figureRepository->findOneBySlug($figure_slug);
         if (!$figure) {

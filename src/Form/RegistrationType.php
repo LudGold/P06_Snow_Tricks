@@ -23,37 +23,42 @@ class RegistrationType extends AbstractType
         $this->addSubmitButton($builder);
     }
 
+    /**
+     * Ajoute les champs de détails utilisateur au formulaire.
+     *
+     * @param FormBuilderInterface $builder Le builder du formulaire
+     */
     private function addUserDetailsFields(FormBuilderInterface $builder): void
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'Nom',
+                'label'       => 'Nom',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le prénom est requis',
                     ]),
                     new Length([
-                        'min' => 2,
+                        'min'        => 2,
                         'minMessage' => 'Le prénom doit avoir au moins {{ limit }} caractères',
-                        'max' => 50,
+                        'max'        => 50,
                     ]),
                 ],
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Prénom',
+                'label'       => 'Prénom',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Le nom est requis',
                     ]),
                     new Length([
-                        'min' => 2,
+                        'min'        => 2,
                         'minMessage' => 'Le nom doit avoir au moins {{ limit }} caractères',
-                        'max' => 50,
+                        'max'        => 50,
                     ]),
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Adresse e-mail',
+                'label'       => 'Adresse e-mail',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'L\'adresse e-mail est requise',
@@ -65,21 +70,26 @@ class RegistrationType extends AbstractType
             ]);
     }
 
+    /**
+     * Ajoute les champs de mot de passe au formulaire.
+     *
+     * @param FormBuilderInterface $builder Le builder du formulaire
+     */
     private function addPasswordFields(FormBuilderInterface $builder): void
     {
         $builder
             ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => [
-                    'label' => 'Mot de passe',
+                'type'            => PasswordType::class,
+                'first_options'   => [
+                    'label'       => 'Mot de passe',
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Le mot de passe est requis',
                         ]),
                         new Length([
-                            'min' => 8,
+                            'min'        => 8,
                             'minMessage' => 'Le mot de passe doit avoir au moins {{ limit }} caractères',
-                            'max' => 4096,
+                            'max'        => 4096,
                         ]),
                         new Regex([
                             'pattern' => '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])/',
@@ -87,18 +97,21 @@ class RegistrationType extends AbstractType
                         ]),
                     ],
                 ],
-                'second_options' => [
+                'second_options'  => [
                     'label' => 'Répétez le mot de passe',
                 ],
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
             ]);
     }
 
+    /**
+     * Ajoute le bouton de soumission au formulaire.
+     *
+     * @param FormBuilderInterface $builder Le builder du formulaire
+     */
     private function addSubmitButton(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
-            ]);
+            ->add('submit', SubmitType::class, ['label' => 'S\'inscrire']);
     }
 }

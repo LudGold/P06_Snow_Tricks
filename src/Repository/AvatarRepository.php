@@ -24,7 +24,7 @@ class AvatarRepository extends ServiceEntityRepository
     /**
      * @return Avatar[] Returns an array of Avatar objects
      */
-    public function findByExampleField($value): array
+    public function findByExampleField(string $value): array
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
@@ -35,7 +35,7 @@ class AvatarRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneBySomeField($value): ?Avatar
+    public function findOneBySomeField(string $value): ?Avatar
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
@@ -43,7 +43,7 @@ class AvatarRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function save(Avatar $entity, bool $flush = false)
+    public function save(Avatar $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -51,7 +51,7 @@ class AvatarRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function remove(Avatar $entity, bool $flush = false)
+    public function remove(Avatar $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

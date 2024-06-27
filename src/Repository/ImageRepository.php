@@ -24,7 +24,7 @@ class ImageRepository extends ServiceEntityRepository
     /**
      * @return Image[] Returns an array of Image objects
      */
-    public function findByExampleField($value): array
+    public function findByExampleField(string $value): array
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')
@@ -35,7 +35,7 @@ class ImageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneBySomeField($value): ?Image
+    public function findOneBySomeField(string $value): ?Image
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')
@@ -43,7 +43,7 @@ class ImageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function save(Image $entity, bool $flush = false)
+    public function save(Image $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -51,7 +51,7 @@ class ImageRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function remove(Image $entity, bool $flush = false)
+    public function remove(Image $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

@@ -42,7 +42,7 @@ class FigureRepository extends ServiceEntityRepository
         return $figure;
     }
 
-    public function save(Figure $entity, bool $flush = false)
+    public function save(Figure $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -51,7 +51,7 @@ class FigureRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Figure $entity, bool $flush = false)
+    public function remove(Figure $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

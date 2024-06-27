@@ -1,0 +1,15 @@
+# Allow all user agents to crawl the site
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+
+
+# Disallow crawling of certain file types
+Disallow: /*.php$
+Disallow: /*.sql$
+Disallow: /*.git$
+
+

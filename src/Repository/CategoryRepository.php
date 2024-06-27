@@ -24,7 +24,7 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @return Category[] Returns an array of Category objects
      */
-    public function findByExampleField($value): array
+    public function findByExampleField(string $value): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
@@ -35,7 +35,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneBySomeField($value): ?Category
+    public function findOneBySomeField(string $value): ?Category
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
@@ -43,7 +43,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function save(Category $entity, bool $flush = false)
+    public function save(Category $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -51,7 +51,7 @@ class CategoryRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function remove(Category $entity, bool $flush = false)
+    public function remove(Category $entity, bool $flush = false): void 
     {
         $this->getEntityManager()->remove($entity);
 

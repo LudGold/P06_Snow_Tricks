@@ -25,7 +25,7 @@ class CommentRepository extends ServiceEntityRepository
     /**
      * @return Comment[] Returns an array of Comment objects
      */
-    public function findByExampleField($value): array
+    public function findByExampleField(string $value): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
@@ -36,7 +36,7 @@ class CommentRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findOneBySomeField($value): ?Comment
+    public function findOneBySomeField(string $value): ?Comment
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
@@ -44,7 +44,7 @@ class CommentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function save(Comment $entity, bool $flush = false)
+    public function save(Comment $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -52,7 +52,7 @@ class CommentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    public function remove(Comment $entity, bool $flush = false)
+    public function remove(Comment $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

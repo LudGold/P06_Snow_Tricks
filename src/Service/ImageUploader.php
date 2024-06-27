@@ -29,27 +29,22 @@ class ImageUploader
         try {
             $file->move($this->getTargetDirectory(), $newfileName);
         } catch (FileException $e) {
-          
         }
 
         return $newfileName;
     }
     public function uploadImages(Figure $figure): void
     {
-     
 
         foreach ($figure->getImages() as $image) {
             if ($image->getFile() !== null) {
                 $fileName = $this->upload($image->getFile());
                 $image->setPath($fileName);
                 $image->setImageName($fileName);
-                
-                // $entityManager->persist($image);
             } elseif ($image->getFile() === null && $image->getImageName() === null) {
                 $figure->removeImage($image);
             }
         }
-       
     }
 
 
