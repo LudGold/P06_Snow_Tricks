@@ -1,5 +1,5 @@
 [![SymfonyInsight](https://insight.symfony.com/projects/4f4d95af-f6ea-4bc3-80ea-5735415bd761/small.svg)](https://insight.symfony.com/projects/4f4d95af-f6ea-4bc3-80ea-5735415bd761)
-https://insight.symfony.com/projects/4f4d95af-f6ea-4bc3-80ea-5735415bd761/small.svg
+
 
 Description de l'image
 Welcome to Snow_Tricks!
