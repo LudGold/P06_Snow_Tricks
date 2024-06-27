@@ -28,7 +28,8 @@
 	<button type="button" class="btn btn-primary btn-new mt-3" data-collection="#trick_images">Ajouter une image</button>
 </div>
 
-<div id="trick_videos" data-prototype="{{ include('figure/_video.html.twig', {form: form.videos.vars.prototype})|e(" html_attr") }}" data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}">
+<div id="trick_videos" data-prototype="{{ include('figure/_video.html.twig', {form: form.videos.vars.prototype})|e('html_attr') }}"
+ data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}">
 	<div class="form-media-section">
 		{% for video in form.videos %}
 			{% if video %}

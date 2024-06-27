@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36ed309f9b9f0f9464bf5217d42ad0e5",
+    "content-hash": "e4b81aa52dc522daa363ed65d47a4018",
     "packages": [
         {
             "name": "amphp/amp",
@@ -453,16 +453,16 @@
         },
         {
             "name": "amphp/http-client",
-            "version": "v4.2.1",
+            "version": "v4.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/http-client.git",
-                "reference": "7ab9ee09c29865133a54060267665c7ad7c6fb17"
+                "reference": "f607a33f81c7b3aafe80cf6c6ed438ca245bbbe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/http-client/zipball/7ab9ee09c29865133a54060267665c7ad7c6fb17",
-                "reference": "7ab9ee09c29865133a54060267665c7ad7c6fb17",
+                "url": "https://api.github.com/repos/amphp/http-client/zipball/f607a33f81c7b3aafe80cf6c6ed438ca245bbbe3",
+                "reference": "f607a33f81c7b3aafe80cf6c6ed438ca245bbbe3",
                 "shasum": ""
             },
             "require": {
@@ -472,20 +472,25 @@
                 "amphp/http": "^1.6",
                 "amphp/socket": "^1",
                 "amphp/sync": "^1.3",
-                "league/uri": "^6",
+                "league/uri": "^6 | ^7",
                 "php": ">=7.2",
-                "psr/http-message": "^1"
+                "psr/http-message": "^1 | ^2"
             },
             "conflict": {
-                "amphp/file": "<0.2 || >=2"
+                "amphp/file": "<0.2 || >=3"
             },
             "require-dev": {
-                "amphp/file": "^1 || ^0.3 || ^0.2",
-                "amphp/http-server": "^2-rc4",
+                "amphp/file": "^0.2 || ^0.3 || ^1 || ^2",
+                "amphp/http-server": "^2",
                 "amphp/php-cs-fixer-config": "dev-master",
                 "amphp/phpunit-util": "^1.1",
+                "amphp/react-adapter": "^2.1",
+                "clue/socks-react": "^1.0",
                 "ext-json": "*",
-                "phpunit/phpunit": "^7 || ^8"
+                "kelunik/link-header-rfc5988": "^1.0",
+                "laminas/laminas-diactoros": "^2.3",
+                "phpunit/phpunit": "^7 || ^8 || ^9",
+                "vimeo/psalm": "^5"
             },
             "suggest": {
                 "amphp/file": "Required for file request bodies and HTTP archive logging",
@@ -499,6 +504,9 @@
                 }
             },
             "autoload": {
+                "files": [
+                    "src/Internal/functions.php"
+                ],
                 "psr-4": {
                     "Amp\\Http\\Client\\": "src"
                 }
@@ -533,9 +541,15 @@
             ],
             "support": {
                 "issues": "https://github.com/amphp/http-client/issues",
-                "source": "https://github.com/amphp/http-client/tree/master"
+                "source": "https://github.com/amphp/http-client/tree/v4.6.4"
             },
-            "time": "2020-03-07T18:12:27+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/amphp",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-21T19:51:27+00:00"
         },
         {
             "name": "amphp/parser",
