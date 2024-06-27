@@ -1,4 +1,4 @@
-[![SymfonyInsight](https://insight.symfony.com/projects/4f4d95af-f6ea-4bc3-80ea-5735415bd761/small.svg)](https://insight.symfony.com/projects/4f4d95af-f6ea-4bc3-80ea-5735415bd761)
+[![SymfonyInsight](https://insight.symfony.com/projects/859a9dc5-80fd-4cfb-bc26-dd9dccffa884/small.svg)](https://insight.symfony.com/projects/859a9dc5-80fd-4cfb-bc26-dd9dccffa884)
 
 
 Description de l'image
