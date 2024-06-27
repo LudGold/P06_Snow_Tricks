@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Security\Voter;
 
 use App\Entity\Figure;
@@ -21,12 +22,12 @@ class UserVoter extends Voter
 
         /** @var User|null $user */
         $user = $token->getUser();
-       
+
         // Si l'utilisateur n'est pas connecté, il n'a pas accès
         if (!$user) {
             return false;
         }
-        if ($user !== $figure->getAuthor()){
+        if ($user !== $figure->getAuthor()) {
             return false;
         }
         // Vérifie si l'utilisateur est l'auteur de la figure

@@ -140,8 +140,6 @@ class FigureController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/delete/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     #[IsGranted('', subject: 'figure')]

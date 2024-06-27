@@ -13,10 +13,10 @@
 
 		{% if figures|length > 15 %}
 
-			<div class="d-flex justify-content-right mt-4">
+			<div class="d-flex justify-content-end mt-4">
 				<button id="load-more-btn" class="btn btn-primary mt-4">Voir plus de figures</button>
 			</div>
-				{% endif %}
+		{% endif %}
 	</div>
 {% endblock %}
 {% block javascripts %}
@@ -24,4 +24,3 @@
 	<script src="{{ asset('js/figures.js') }}"></script>
 	<script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}
-

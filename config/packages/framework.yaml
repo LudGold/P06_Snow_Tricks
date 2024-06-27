@@ -1,16 +1,16 @@
 # config/packages/framework.yaml
 
 framework:
-    secret: '%env(APP_SECRET)%'
+    secret: "%env(APP_SECRET)%"
     #csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
     default_locale: fr
-    translator: { fallbacks: ['en'] }
+    translator: { fallbacks: ["en"] }
     #esi: true
     #fragments: true
-    # error_controller: 'App\Controller\ExceptionController::showError' 
+    # error_controller: 'App\Controller\ExceptionController::showError'
 
 when@test:
     framework:

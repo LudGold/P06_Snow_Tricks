@@ -19,11 +19,11 @@
 						</div>
 					{% endif %}
 
-					<h1 class="h3 mb-3 font-weight-normal text-center">Inscrivez-vous ici</h1>
+					<h1 class="h3 mb-3 font-weight-normal text-center">Connectez-vous ici</h1>
 					<label for="username">Email</label>
 					<input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control mb-2" autocomplete="email" required autofocus>
 
-					<label for="password">Password</label>
+					<label for="password">Mot de passe</label>
 					<input type="password" name="_password" id="password" class="form-control mb-2" autocomplete="current-password" required>
 
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -31,11 +31,11 @@
 					<div class="checkbox mb-3">
 						<label>
 							<input type="checkbox" name="_remember_me">
-							Remember me
+							Se rappeler de moi
 						</label>
 					</div>
 					<button class="btn btn-lg btn-primary btn-block" type="submit">
-						Sign in
+						Valider
 					</button>
 				</form>
 				<a class="forgot-password" href="{{ path('app_forgot_password') }}">Mot de passe oublié?</a>

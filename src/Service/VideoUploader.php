@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\Figure;
@@ -6,7 +7,7 @@ use App\Entity\Figure;
 class VideoUploader
 {
 
-        public function uploadVideos(Figure $figure): void
+    public function uploadVideos(Figure $figure): void
     {
         foreach ($figure->getVideos() as $video) {
             $check = parse_url($video->getName(), PHP_URL_HOST);

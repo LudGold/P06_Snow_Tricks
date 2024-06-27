@@ -11,16 +11,19 @@ body {
 /* Menu principal (bureau) */
 @media (min-width: 768px) {
     .footer-menu {
-        display: none; /* Masquer le menu mobile sur les écrans moyens et grands */
+        display: none;
     }
+
     .navbar {
         display: flex;
     }
 }
 
 .collapse {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce avec un peu de décalage vertical */
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(245, 245, 245, 0.9) 100%); /* Dégradé léger pour un effet visuel agréable */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(245, 245, 245, 0.9) 100%);
+
     border-bottom: 1px solid #ddd;
 }
 
@@ -30,15 +33,18 @@ body {
 }
 
 .navbar-nav {
-    flex-direction: row; /* Disposer les items du menu horizontalement */
+    flex-direction: row;
+
 }
 
 .navbar-nav .nav-item {
-    margin-left: 15px; /* Espacement entre les items */
+    margin-left: 15px;
+
 }
 
 .navbar-brand {
-    margin-right: auto; /* Pousser le logo à gauche */
+    margin-right: auto;
+
 }
 
 .nav-link {
@@ -48,20 +54,28 @@ body {
 }
 
 .nav-link:hover {
-    color: #0056b3; /* Couleur au survol */
+    color: #0056b3;
+
 }
 
 .main-content {
     margin-bottom: 100px;
 }
 
+a {
+    text-decoration: none !important;
+    color: black !important;
+}
+
 a.forgot-password,
 .mt-3 a {
-    color: black;
+    color: #0056b3;
+    ;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bolder;
 }
+
 
 button.btn.btn-lg.btn-primary.btn-block {
     margin-bottom: 3rem;
@@ -101,6 +115,8 @@ button.btn.btn-lg.btn-primary.btn-block {
     flex: 1;
     text-align: center;
 }
+
+
 
 .text-dark {
     color: black !important;
@@ -145,10 +161,6 @@ button.btn.btn-lg.btn-primary.btn-block {
     object-fit: cover;
 }
 
-.title-card a {
-    text-decoration: none;
-    color: black;
-}
 
 .home-btn {
     width: 40px;
@@ -162,10 +174,15 @@ button.btn.btn-lg.btn-primary.btn-block {
 
 .homepage-banner {
     position: relative;
-    background: url('/uploads/images/backflip.jpg') no-repeat center center;
+    background: url('/uploads/images/cover.jpg') no-repeat center;
     background-size: cover;
     color: white;
     padding: 200px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 5px solid #fff;
+    border-radius: 10px;
+    overflow: hidden;
+
 }
 
 .scroll-down-arrow {
@@ -193,8 +210,8 @@ button#scroll-up {
 }
 
 .custom-select {
-    width: auto; /* Utiliser toute la largeur du conteneur */
-    padding: 10px 15px; /* Ajouter du padding interne pour un look plus espacé */
+    width: auto;
+    padding: 10px 15px;
     font-size: 1rem;
     box-shadow: 0 0 0 0.2rem rgba(198, 160, 236, 0.25) !important;
 }
@@ -213,8 +230,8 @@ button#scroll-up {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px; /* Coins arrondis pour un effet esthétique */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajouter une ombre pour la profondeur */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
@@ -223,7 +240,7 @@ button#scroll-up {
     left: 80%;
     opacity: 0.9;
     gap: 10px !important;
-    padding: 5px; /* Ajout de padding pour un peu d'espace interne */
+    padding: 5px;
     border-radius: 5px;
 }
 
@@ -253,16 +270,17 @@ label {
     border-radius: 5px;
     background-color: white;
     box-shadow: 10px 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 70%; /* Limite la largeur du bloc de commentaire */
-    text-align: left; /* Texte aligné à gauche */
-    position: relative; /* Pour positionner le contenu interne */
+    max-width: 70%;
+    text-align: left;
+    position: relative;
 }
 
 .avatar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 15px; /* Espacement à droite de l'avatar */
+    margin-right: 15px;
+    /* Espacement à droite de l'avatar */
     position: relative;
 }
 
@@ -276,35 +294,37 @@ label {
 }
 
 .comment-content {
-    margin-top: 10px; /* Space between top of comment box and the comment content */
+    margin-top: 10px;
+
 }
 
 .comment-date {
-    font-size: 0.8rem; /* Smaller font for the date */
+    font-size: 0.8rem;
     color: gray;
 }
 
 .comment-content p {
-    font-size: 1rem; /* Adjust font size as needed */
-    margin-top: 5px; /* Space between the date and the comment content */
+    font-size: 1rem;
+    margin-top: 5px;
+
 }
 
 .comment-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 30px; /* Espacement entre les commentaires */
-    width: 100%; /* Utiliser toute la largeur disponible */
-    max-width: 800px; /* Limiter la largeur maximale */
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .avatar-style {
-    width: 60px; /* Taille de l'avatar */
-    height: 60px; /* Taille de l'avatar */
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
-    margin-bottom: 5px; /* Espacement sous l'avatar */
+    margin-bottom: 5px;
 }
 
 .user-profile {
@@ -320,55 +340,56 @@ button#figure_submit {
 .input-media.hidden-input {
     margin-top: 5rem;
 }
+
 .pagination {
     display: flex;
-    justify-content: center; /* Centrer la pagination horizontalement */
-    align-items: center; /* Centrer verticalement les éléments */
+    justify-content: center;
+    align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    list-style: none; /* Retirer les puces de la liste */
+    list-style: none;
     padding: 0;
 }
 
 .pagination li {
-    margin: 0 5px; /* Espacement horizontal entre les éléments */
+    margin: 0 5px;
 }
 
 .pagination a {
     display: block;
-    padding: 10px 15px; /* Taille des boutons */
-    text-decoration: none; /* Retirer la décoration de texte */
-    color: #333; /* Couleur par défaut du texte */
-    background-color: #f9f9f9; /* Couleur de fond par défaut */
-    border: 1px solid #ddd; /* Bordure légère */
-    border-radius: 5px; /* Coins arrondis */
-    transition: background-color 0.3s, color 0.3s; /* Animation des couleurs */
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .pagination a:hover {
-    background-color: #5b10c5; /* Couleur de fond au survol */
-    color: white; /* Couleur du texte au survol */
+    background-color: #5b10c5;
+    color: white;
 }
 
 /* Vignettes */
 .thumbnail-container {
     position: relative;
-    border: 1px solid #ddd; /* Bordure légère pour visualiser les cartes */
-    border-radius: 5px; /* Coins légèrement arrondis */
-    height: 200px; /* Taille uniforme pour les vignettes */
-    width: 100%; /* Assurer que les vignettes utilisent toute la largeur disponible */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 200px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
-    margin-bottom: 15px; /* Espacement entre les vignettes */
+    margin-bottom: 15px;
 }
 
 .thumbnail-container img,
 .thumbnail-container .embed-responsive {
-    width: 100%; /* S'assurer que le contenu remplit toute la vignette */
-    height: 100%; /* S'assurer que le contenu remplit toute la vignette */
-    object-fit: cover; /* Assurer que l'image ou la vidéo couvre entièrement la vignette */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .thumbnail-container iframe {
@@ -389,7 +410,8 @@ button#figure_submit {
         justify-content: space-around;
         padding: 10px 0;
         box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000; /* Assurez-vous que le menu est au-dessus des autres contenus */
+        z-index: 1000;
+
     }
 
     .footer-menu .footer-icon {
@@ -422,17 +444,17 @@ button#figure_submit {
     }
 
     .comment-wrapper {
-        flex-direction: column; /* Colonne pour les petits écrans */
+        flex-direction: column;
         align-items: center;
     }
 
     .avatar-container {
         margin-right: 0;
-        margin-bottom: 10px; /* Espacement en bas de l'avatar */
+        margin-bottom: 10px;
     }
 
     .comment-block {
-        max-width: 100%; /* Utiliser toute la largeur disponible */
+        max-width: 100%;
     }
 
     #scroll-up {
