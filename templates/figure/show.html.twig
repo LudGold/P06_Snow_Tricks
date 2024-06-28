@@ -19,7 +19,7 @@
 					<form method="post" action="{{ path('app_figure_delete', {'id': figure.images[0].id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image de couverture ?');" style="display: inline-block;">
 						<input type="hidden" name="_token" value="{{ csrf_token('delete_cover' ~ figure.images[0].id) }}">
 						<button class="btn btn-danger btn-delete" type="submit">
-							<i class="fas fa-trash-alt"></i>
+							<i class="fas fa-trash-alt text-dark"></i>
 						</button>
 					</form>
 				</div>
@@ -41,7 +41,7 @@
 									<form method="post" action="{{ path('app_figure_delete', {'id': image.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette image ?');" style="display: inline-block;">
 										<input type="hidden" name="_token" value="{{ csrf_token('delete_image' ~ image.id) }}">
 										<button class="btn btn-danger btn-delete" type="submit">
-											<i class="fas fa-trash-alt"></i>
+											<i class="fas fa-trash-alt text-dark"></i>
 										</button>
 									</form>
 								</div>
@@ -65,7 +65,7 @@
 									<form method="post" action="{{ path('app_figure_delete', {'id': video.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?');" style="display: inline-block;">
 										<input type="hidden" name="_token" value="{{ csrf_token('delete_video' ~ video.id) }}">
 										<button class="btn btn-danger btn-delete" type="submit">
-											<i class="fas fa-trash-alt"></i>
+											<i class="fas fa-trash-alt text-dark"></i>
 										</button>
 									</form>
 								</div>
@@ -109,7 +109,7 @@
 					<form method="post" action="{{ path('app_figure_delete', {'id': figure.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir  cette figure?');" style="display: inline-block;">
 						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ figure.id) }}">
 						<button class="btn btn-danger btn-delete" type="submit">
-							<i class="fas fa-trash-alt"></i>
+							<i class="fas fa-trash-alt text-dark"></i>
 
 						</button>
 					</form>

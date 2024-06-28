@@ -1,122 +1,99 @@
 [
-    {
-        "name": "Backflip",
-        "description": "Le backflip est un saut dans lequel le rider effectue une rotation arrière complète dans les airs.",
-        "category": "Invert",
-        "images": [
-            "https://example.com/images/backflip_1.jpg",
-            "https://example.com/images/backflip_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/backflip_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "720",
-        "description": "Le 720 est un saut dans lequel le rider effectue une rotation complète de 720 degrés dans les airs.",
-        "category": "Rotation",
-        "images": [
-            "https://example.com/images/720_1.jpg",
-            "https://example.com/images/720_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/720_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "540",
-        "description": "Le 540 est un saut dans lequel le rider effectue une rotation complète de 540 degrés dans les airs.",
-        "category": "Rotation",
-        "images": [
-            "https://example.com/images/540_1.jpg",
-            "https://example.com/images/540_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/540_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Method Grab",
-        "description": "Le method grab est un trick dans lequel le rider attrape le talon de sa planche avec la main avant et plie ses genoux vers la poitrine.",
-        "category": "Grab",
-        "images": [
-            "https://example.com/images/method_grab_1.jpg",
-            "https://example.com/images/method_grab_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/method_grab_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Backside 180",
-        "description": "Le backside 180 est un saut dans lequel le rider tourne son corps à 180 degrés dans le sens inverse des aiguilles d'une montre.",
-        "category": "Rotation",
-        "images": [
-            "https://example.com/images/backside_180_1.jpg",
-            "https://example.com/images/backside_180_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/backside_180_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Frontside 180",
-        "description": "Le frontside 180 est un saut dans lequel le rider tourne son corps à 180 degrés dans le sens des aiguilles d'une montre.",
-        "category": "Rotation",
-        "images": [
-            "https://example.com/images/frontside_180_1.jpg",
-            "https://example.com/images/frontside_180_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/frontside_180_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Indy Grab",
-        "description": "L'indy grab consiste à attraper la carre frontside de la planche avec la main arrière.",
-        "category": "Grab",
-        "images": [
-            "https://example.com/images/indy_grab_1.jpg",
-            "https://example.com/images/indy_grab_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/indy_grab_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Tail Grab",
-        "description": "Le tail grab est un trick où le rider attrape le tail (arrière) de la planche avec sa main pendant un saut.",
-        "category": "Grab",
-        "images": [
-            "https://example.com/images/tail_grab_1.jpg",
-            "https://example.com/images/tail_grab_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/tail_grab_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Nollie",
-        "description": "Le nollie est similaire à l'ollie, mais il est exécuté en commençant par le nez de la planche au lieu de la queue.",
-        "category": "Flatland",
-        "images": [
-            "https://example.com/images/nollie_1.jpg",
-            "https://example.com/images/nollie_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/nollie_tutorial.mp4"
-        ]
-    },
-    {
-        "name": "Ollie",
-        "description": "L'ollie est un des tricks les plus basiques en snowboard. Il consiste à sauter dans les airs sans l'aide d'un saut naturel ou d'un obstacle.",
-        "category": "Flatland",
-        "images": [
-            "https://example.com/images/ollie_1.jpg",
-            "https://example.com/images/ollie_2.jpg"
-        ],
-        "videos": [
-            "https://example.com/videos/ollie_tutorial.mp4"
-        ]
-    }
+  {
+    "name": "Backflip",
+    "description": "Le backflip est un saut dans lequel le rider effectue une rotation arrière complète dans les airs.",
+    "category": "Invert",
+    "images": [
+      "/uploads/images/backflip_2.jpg",
+      "/uploads/images/backflip.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "720",
+    "description": "Le 720 est un saut dans lequel le rider effectue une rotation complète de 720 degrés dans les airs.",
+    "category": "Rotation",
+    "images": [
+      "/uploads/images/pexels-visitalmaty-848599-66743aafa4412.jpg",
+      "/uploads/images/720.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "540",
+    "description": "Le 540 est un saut dans lequel le rider effectue une rotation complète de 540 degrés dans les airs.",
+    "category": "Rotation",
+    "images": [
+      "/uploads/images/540.jpg",
+      "/uploads/images/felipe-giacometti-W5XmCGt66ac-unsplash-6673e5c0232ae.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Method Grab",
+    "description": "Le method grab est un trick dans lequel le rider attrape le talon de sa planche avec la main avant et plie ses genoux vers la poitrine.",
+    "category": "Grab",
+    "images": ["/uploads/images/cover.jpg", "/uploads/images/greensnow.jpg"],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Backside 180",
+    "description": "Le backside 180 est un saut dans lequel le rider tourne son corps à 180 degrés dans le sens inverse des aiguilles d'une montre.",
+    "category": "Rotation",
+    "images": [
+      "/uploads/images/felipe-giacometti-iUtHGXoC7Dc-unsplash-66743a897bec2.jpg",
+      "/uploads/images/540.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Frontside 180",
+    "description": "Le frontside 180 est un saut dans lequel le rider tourne son corps à 180 degrés dans le sens des aiguilles d'une montre.",
+    "category": "Rotation",
+    "images": [
+      "/uploads/images/scene-hiver-photorealiste-gens-faisant-du-snowboard-667d23f4df6b3.jpg",
+      "/uploads/images/720.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Indy Grab",
+    "description": "L'indy grab consiste à attraper la carre frontside de la planche avec la main arrière.",
+    "category": "Grab",
+    "images": [
+      "/uploads/images/snowboarding-2-66745023b774b.jpg",
+      "/uploads/images/backflip.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Tail Grab",
+    "description": "Le tail grab est un trick où le rider attrape le tail (arrière) de la planche avec sa main pendant un saut.",
+    "category": "Grab",
+    "images": [
+      "/uploads/images/greensnow.jpg",
+      "/uploads/images/snowboarding.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Nollie",
+    "description": "Le nollie est similaire à l'ollie, mais il est exécuté en commençant par le nez de la planche au lieu de la queue.",
+    "category": "Flatland",
+    "images": [
+      "/uploads/images/snowboarding-2.jpg",
+      "/uploads/images/felipe-giacometti-iUtHGXoC7Dc-unsplash-66743a897bec2.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  },
+  {
+    "name": "Ollie",
+    "description": "L'ollie est un des tricks les plus basiques en snowboard. Il consiste à sauter dans les airs sans l'aide d'un saut naturel ou d'un obstacle.",
+    "category": "Flatland",
+    "images": [
+      "/uploads/images/backflip_2.jpg",
+      "/uploads/images/felipe-giacometti-W5XmCGt66ac-unsplash-6673eefa5416c.jpg"
+    ],
+    "videos": ["https://www.youtube.com/watch?v=4xvwbWqUWgI"]
+  }
 ]
