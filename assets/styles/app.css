@@ -123,10 +123,17 @@ button.btn.btn-lg.btn-primary.btn-block {
 }
 
 .description-txt {
-    font-size: 20px;
+    text-align: left;
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 /* Boutons */
+.action-buttons{
+    margin: 20px 0;
+}
 .btn-new,
 .btn {
     display: inline-flex;
@@ -149,6 +156,7 @@ button.btn.btn-lg.btn-primary.btn-block {
 .btn-delete {
     background-color: transparent !important;
     border-color: transparent !important;
+    margin-right: 10px;
 }
 
 .btn-validate {
@@ -205,6 +213,7 @@ button.btn.btn-lg.btn-primary.btn-block {
 
 button#scroll-up {
     font-size: 40px;
+    margin-left: 59rem;
     border-color: transparent;
     background-color: transparent;
 }
@@ -237,11 +246,10 @@ button#scroll-up {
 
 .cover-image-buttons {
     position: absolute;
-    left: 70%;
-    opacity: 0.9;
+    left: 77%;
     gap: 10px !important;
     padding: 5px;
-    border-radius: 5px;
+   
 }
 
 label {
@@ -370,13 +378,16 @@ button#figure_submit {
     background-color: #5b10c5;
     color: white;
 }
-
+#figure-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
 /* Vignettes */
 .thumbnail-container {
     position: relative;
-    border: 1px solid #ddd;
     border-radius: 5px;
-    height: 200px;
+    height: 250px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -459,9 +470,10 @@ button#figure_submit {
         max-width: 100%;
     }
 
-    #scroll-up {
+    button#scroll-up {
         font-size: 1rem !important;
         width: 40px !important;
         height: 40px !important;
+        margin: 0;
     }
 }

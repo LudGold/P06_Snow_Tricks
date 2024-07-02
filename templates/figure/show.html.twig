@@ -78,8 +78,8 @@
 
 		<div class="container-show">
 
-			<div class="mt-4">
-				<h3>{{ figure.name }}</h3>
+			<div class="mt-4" id="figure-title">
+				<h1>{{ figure.name }}</h1>
 			</div>
 
 			{# Description de la figure #}
@@ -102,7 +102,7 @@
 			</div>
 
 			{% if app.user == figure.author %}
-				<div class="mt-4">
+				<div class="mt-4 action-buttons">
 					<a href="{{ path('app_figure_edit', {'slug': figure.slug}) }}" class="btn btn-primary mr-2 btn-edit">
 						<i class="bi bi-pencil"></i>
 					</a>
