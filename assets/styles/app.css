@@ -151,7 +151,12 @@ button.btn.btn-lg.btn-primary.btn-block {
     cursor: pointer;
     border: none;
 }
-
+#reset_password_submit{
+    color: white;
+}
+#reset_password_submit:hover{
+    color: black;
+}
 .btn-edit,
 .btn-delete {
     background-color: transparent !important;
